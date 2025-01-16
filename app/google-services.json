@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "260228151799",
+    "project_id": "healthlylive-2fefb",
+    "storage_bucket": "healthlylive-2fefb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260228151799:android:48b21e8613a05d973e56f2",
+        "android_client_info": {
+          "package_name": "com.example.healthlylife"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAEXgNnRMGI6PLljeW66PpE9ozTIzj7yU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
