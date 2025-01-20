@@ -3,31 +3,35 @@ package com.example.healthlylife.functions
 import com.example.healthlylife.data.UserFormData
 import java.text.DateFormatSymbols
 import java.util.Calendar
+import kotlin.math.ceil
 
 
-fun calculateCalorieIntake(userFormData: UserFormData): Double {
-    val weight = userFormData.currentWeight  // konwersja na Double
-    val height = userFormData.height  // konwersja na Double
-    val age = userFormData.age.toDouble()  // konwersja na Double
+fun calculateCalorieIntake(userFormData: UserFormData) {
 
-    val bmr: Double
-    if (userFormData.gender == "Male") {
-        bmr = 10 * userFormData.currentWeight + 6.25 * userFormData.height - 5 * userFormData.age + 5
-    } else {
-        bmr = 10 * userFormData.currentWeight + 6.25 * userFormData.height - 5 * userFormData.age - 161
+    val calorieSurplus = 500
+    val calorieDeficit = 500
+
+    fun calculateBMR(weight: Double, height: Double, age: Int, gender: String): Double {
+        return if (gender == "Man") {
+            10 * weight + 6.25 * height - 5 * age + 5
+        } else {
+            10 * weight + 6.25 * height - 5 * age - 161
+        }
     }
 
-    return when (userFormData.goal) {
-        "GAIN WEIGHT" -> bmr + 500  // Dodatkowe 500 kcal dziennie
-        "LOSE WEIGHT" -> bmr - 500  // Mniej 500 kcal dziennie
-        else -> bmr  // Utrzymanie wagi
+    val bmr = calculateBMR(userFormData.currentWeight, userFormData.height, userFormData.age, userFormData.gender)
+    val adjustedBmr = when (userFormData.goal) {
+        "Gain Weight" -> bmr + calorieSurplus
+        "Lose Weight" -> bmr - calorieDeficit
+        else -> bmr
     }
+    userFormData.bmr = adjustedBmr
 }
 
-fun calculateGoalCompletionDate(userFormData: UserFormData): String {
+fun calculateGoalCompletionDate(userFormData: UserFormData) {
     val goalWeight = userFormData.targetWeight
-    val weeklyChange = if (userFormData.goal == "GAIN WEIGHT") 0.5 else -0.5
-    val daysToGoalWeight = Math.ceil((goalWeight - userFormData.currentWeight) / (weeklyChange / 7)).toInt()
+    val weeklyChange = if (userFormData.goal == "Gain Weight") 0.5 else -0.5
+    val daysToGoalWeight = ceil((goalWeight - userFormData.currentWeight) / (weeklyChange / 7)).toInt()
 
     val calendar = Calendar.getInstance()
     calendar.add(Calendar.DAY_OF_YEAR, daysToGoalWeight)
@@ -36,9 +40,8 @@ fun calculateGoalCompletionDate(userFormData: UserFormData): String {
     val month = getMonthName(calendar.get(Calendar.MONTH))
     val year = calendar.get(Calendar.YEAR)
 
-
-
-    return "$dayOfMonth $month $year"
+    val goalData = ("$dayOfMonth $month $year")
+    userFormData.goalData = goalData
 }
 
 fun getMonthName(month: Int): String {

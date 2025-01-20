@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.data.UserFormData
+import com.example.healthlylife.functions.calculateCalorieIntake
+import com.example.healthlylife.functions.calculateGoalCompletionDate
 import com.example.healthlylife.presentation.damionFontFamily
 
 
@@ -184,6 +186,8 @@ fun InfoStep(modifier: Modifier = Modifier, navController: NavController, userFo
                         userFormData.currentWeight = weight.toDouble()
                         userFormData.targetWeight = targetWeight.toDouble()
                         userFormData.height = height.toDouble()
+                        calculateGoalCompletionDate(userFormData)
+                        calculateCalorieIntake(userFormData)
                         onNext()
                     },
                         text = "NEXT",

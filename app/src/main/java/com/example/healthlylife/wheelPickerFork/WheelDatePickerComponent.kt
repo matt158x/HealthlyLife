@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
-import network.chaintech.utils.MAX
 import network.chaintech.utils.MIN
 import network.chaintech.utils.SelectorProperties
 import network.chaintech.utils.noRippleEffect
@@ -59,10 +58,8 @@ object WheelDatePickerComponent {
         doneLabel: String = "Done",
         titleStyle: TextStyle = LocalTextStyle.current,
         doneLabelStyle: TextStyle = LocalTextStyle.current,
-        startDate: LocalDate = LocalDate.now(),
-        minDate: LocalDate = LocalDate.MIN(),
-        maxDate: LocalDate = LocalDate.MAX(),
-        yearsRange: IntRange? = IntRange(1922, 2122),
+        startDate: LocalDate = LocalDate(2000, 6, 15),
+        yearsRange: IntRange? = IntRange(1950, 2025),
         height: Dp = 128.dp,
         rowCount: Int = 3,
         showShortMonths: Boolean = false,
@@ -119,8 +116,6 @@ object WheelDatePickerComponent {
                 height = height,
                 modifier = Modifier.padding(top = 14.dp, bottom = 14.dp),
                 startDate = startDate,
-                minDate = minDate,
-                maxDate = maxDate,
                 yearsRange = yearsRange,
                 showShortMonths = showShortMonths,
                 textStyle = dateTextStyle,

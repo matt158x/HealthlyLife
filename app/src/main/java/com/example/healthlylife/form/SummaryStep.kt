@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -77,8 +78,8 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp) // Dopasuj wysokość do obrazu
-                        .padding(16.dp),
+                        .height(300.dp)
+                        .width(350.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     // Wykres
@@ -88,54 +89,88 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
                         modifier = Modifier.fillMaxHeight()
                     )
 
-                    // Waga na środku po lewej
+
                     Text(
                         text = "${userFormData.currentWeight.toInt()} kg",
                         color = Color.White,
                         fontSize = 16.sp,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
-                            .padding(start = 10.dp)
+                            .padding(10.dp)
+
                     )
 
-                    // Waga docelowa na środku po prawej
+
                     Text(
                         text = "${userFormData.targetWeight.toInt()} kg",
                         color = Color.White,
                         fontSize = 16.sp,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
-                            .padding(end = 10.dp)
+                            .padding(10.dp)
+
                     )
 
 
                     Text(
-                        text = "",
-                        fontFamily = damionFontFamily,
+                        text = "Today",
                         color = Color.White,
-                        fontSize = 22.sp
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(20.dp)
                     )
 
                     Text(
-                        text = "",
-                        fontFamily = damionFontFamily,
+                        text = userFormData.goalData,
                         color = Color.White,
-                        fontSize = 22.sp
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(20.dp)
                     )
 
                 }
 
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier.height(20.dp))
 
-                // Dodatkowy tekst
                 Text(
-                    text = "We use this information to calculate and provide you with \n daily personalized recommendations",
-                    color = Color(0xFF616161),
+                    text = "0.5 kg / week",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier.height(20.dp))
+
+                Text(
+                    text = "Recommend calories intake per day:",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier.height(10.dp))
+
+                Text(
+                    text = "${userFormData.bmr.toInt()} kcal",
+                    color = Color(0XFFBADA55),
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center
+
+                )
+
+                Spacer(modifier.height(10.dp))
+
+                Text(
+                    text = "We recommend this weight pace for long-term success",
+                    color = Color.White,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+
+                Spacer(modifier = Modifier.height(50.dp))
+                
 
                 CustomButton(
                     onClick = {

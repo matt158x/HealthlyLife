@@ -51,6 +51,7 @@ fun MultiStepUserForm(navController: NavController) {
                 navController = navController,
                 onSubmit = {
                     if (userId != null) {
+                        userFormData.formCompleted = true
                         firestore.collection("users")
                             .document(userId)
                             .set(userFormData)

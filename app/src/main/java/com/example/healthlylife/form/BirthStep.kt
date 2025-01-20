@@ -114,7 +114,7 @@ fun BirthDateStep(modifier: Modifier = Modifier, navController: NavController, u
                     onDateChangeListener = { selectedDate ->
                         birthDateInput = selectedDate.toString()
                     },
-                    hideHeader = true,
+                    hideHeader = true
                 )}
 
 
@@ -134,8 +134,8 @@ fun BirthDateStep(modifier: Modifier = Modifier, navController: NavController, u
 
                 CustomButton(onClick = {
                     userFormData.birthDate = birthDateInput
-                    userAge = calculateAge(birthDateInput)
-                    userFormData.age = userAge.toInt()
+                    calculateAge(birthDateInput, userFormData)
+                    userFormData.age = userAge
                     onNext()
                 },
                     text = "NEXT",

@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AuthViewModel : ViewModel() {
 
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
-
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
@@ -16,13 +17,31 @@ class AuthViewModel : ViewModel() {
         checkAuthStatus()
     }
 
-    private fun checkAuthStatus(){
-        if(auth.currentUser==null){
+    private fun checkAuthStatus() {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
             _authState.value = AuthState.Unauthenticated
-        }else {
-            _authState.value = AuthState.Authenticated
+        } else {
+            checkFormCompletionStatus(currentUser.uid) // Sprawdź, czy formularz został ukończony
         }
     }
+
+    private fun checkFormCompletionStatus(userId: String) {
+        firestore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists() && document.getBoolean("formCompleted") == true) {
+                    _authState.value = AuthState.Authenticated // Przekierowanie na homepage
+                } else {
+                    _authState.value = AuthState.FormNotCompleted // Przekierowanie na formularz
+                }
+            }
+            .addOnFailureListener { e ->
+                _authState.value = AuthState.Error(e.message ?: "Failed to fetch user data")
+            }
+    }
+
 
     fun login(email : String, password : String){
 
@@ -69,6 +88,7 @@ class AuthViewModel : ViewModel() {
 sealed class AuthState{
     data object Authenticated : AuthState()
     data object Unauthenticated : AuthState()
+    data object FormNotCompleted : AuthState()
     data object Loading : AuthState()
 
     data class Error(val message : String) : AuthState()
