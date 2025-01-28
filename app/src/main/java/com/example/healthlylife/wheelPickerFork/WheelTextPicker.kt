@@ -156,7 +156,6 @@ private fun Modifier.fadingEdge(brush: Brush) = this
         drawRect(brush = brush, blendMode = BlendMode.DstIn)
     }
 
-
 @OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun calculateAnimatedAlpha(

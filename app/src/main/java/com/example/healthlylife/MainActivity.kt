@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import com.example.healthlylife.navigation.AppNavigation
 import com.example.healthlylife.navigation.AuthViewModel
 import com.example.healthlylife.ui.theme.HealthlyLifeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +26,6 @@ class MainActivity : ComponentActivity() {
                     AppNavigation(modifier = Modifier.padding(innerPadding)
                         ,authViewModel = authViewModel
                     )
-
                 }
             }
         }

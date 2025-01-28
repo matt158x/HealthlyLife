@@ -52,7 +52,6 @@ fun RegisterScreen(modifier: Modifier = Modifier, navController: NavController, 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -153,7 +152,6 @@ fun RegisterScreen(modifier: Modifier = Modifier, navController: NavController, 
                                 painter = painterResource(R.drawable.ic_baseline_password_24),
                                 tint = Color(0XFF8692F7),
                                 contentDescription = "Confirm Password Icon"
-
                             )
                         }
                     )

@@ -1,6 +1,12 @@
 package com.example.healthlylife.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,22 +20,45 @@ import com.example.healthlylife.presentation.StartScreen
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel) {
     val navController = rememberNavController()
+    val authState by authViewModel.authState.observeAsState(AuthState.Loading)
 
-    NavHost(navController = navController, startDestination = "start", builder = {
+    NavHost(
+        navController = navController,
+        startDestination = "start",
+        enterTransition = { fadeIn(animationSpec = tween(300)) },
+                exitTransition = { fadeOut(animationSpec = tween(300)) }
+    ) {
         composable("start") {
-            StartScreen(navController)
+            StartScreen(navController, authViewModel)
         }
-        composable ("login") {
-            LoginScreen(modifier,navController,authViewModel)
+        composable("login") {
+            LoginScreen(modifier, navController, authViewModel)
         }
-        composable("signup"){
-            RegisterScreen(modifier,navController,authViewModel)
+        composable("signup") {
+            RegisterScreen(modifier, navController, authViewModel)
         }
-        composable("home"){
-            HomeScreen(modifier,navController,authViewModel)
+        composable("home") {
+            HomeScreen(modifier, navController, authViewModel)
         }
         composable("form") {
             MultiStepUserForm(navController)
         }
-    })
+    }
+
+    LaunchedEffect(authState) {
+        when (authState) {
+            is AuthState.Authenticated -> navController.navigate("home") {
+                popUpTo("start") { inclusive = true }
+            }
+
+            is AuthState.FormNotCompleted -> navController.navigate("form") {
+                popUpTo("start") { inclusive = true }
+            }
+
+            is AuthState.Unauthenticated -> navController.navigate("start") {
+                popUpTo("start") { inclusive = true }
+            }
+            else -> Unit
+        }
+    }
 }

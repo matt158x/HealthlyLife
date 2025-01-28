@@ -17,31 +17,31 @@ class AuthViewModel : ViewModel() {
         checkAuthStatus()
     }
 
-    private fun checkAuthStatus() {
+    fun checkAuthStatus() {
         val currentUser = auth.currentUser
         if (currentUser == null) {
             _authState.value = AuthState.Unauthenticated
         } else {
-            checkFormCompletionStatus(currentUser.uid) // Sprawdź, czy formularz został ukończony
+            checkFormCompletionStatus(currentUser.uid)
         }
     }
 
-    private fun checkFormCompletionStatus(userId: String) {
+   private fun checkFormCompletionStatus(userId: String) {
+        _authState.value = AuthState.Loading
         firestore.collection("users")
             .document(userId)
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists() && document.getBoolean("formCompleted") == true) {
-                    _authState.value = AuthState.Authenticated // Przekierowanie na homepage
+                    _authState.value = AuthState.Authenticated
                 } else {
-                    _authState.value = AuthState.FormNotCompleted // Przekierowanie na formularz
+                    _authState.value = AuthState.FormNotCompleted
                 }
             }
             .addOnFailureListener { e ->
                 _authState.value = AuthState.Error(e.message ?: "Failed to fetch user data")
             }
     }
-
 
     fun login(email : String, password : String){
 
@@ -52,10 +52,15 @@ class AuthViewModel : ViewModel() {
         _authState.value = AuthState.Loading
         auth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener{task ->
-                if(task.isSuccessful){
-                    _authState.value = AuthState.Authenticated
-                }else {
-                    _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
+                if (task.isSuccessful) {
+                    val userId = auth.currentUser?.uid
+                    if (userId != null) {
+                        checkFormCompletionStatus(userId)
+                    } else {
+                        _authState.value = AuthState.Error("User ID not found")
+                    }
+                } else {
+                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
@@ -70,8 +75,8 @@ class AuthViewModel : ViewModel() {
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener{task ->
                 if(task.isSuccessful){
-                    _authState.value = AuthState.Authenticated
-                }else {
+                    _authState.value = AuthState.FormNotCompleted
+                } else {
                     _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
                 }
             }
@@ -81,8 +86,6 @@ class AuthViewModel : ViewModel() {
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
     }
-
-
 }
 
 sealed class AuthState{

@@ -120,7 +120,7 @@ fun DefaultWheelDatePicker(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
         ) {
-           WheelTextPicker(
+            WheelTextPicker(
                 modifier = Modifier.width(120.dp),
                 startIndex = months.find { it.value == startDate.monthNumber }?.index ?: 0,
                 height = height,

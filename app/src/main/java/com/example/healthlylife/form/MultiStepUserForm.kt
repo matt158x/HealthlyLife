@@ -1,5 +1,13 @@
 package com.example.healthlylife.form
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -8,65 +16,75 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.healthlylife.data.UserFormData
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.healthlylife.viewmodel.UserFormViewModel
 
 
 @Composable
-fun MultiStepUserForm(navController: NavController) {
-
+fun MultiStepUserForm(navController: NavController, viewModel: UserFormViewModel = hiltViewModel()) {
     var currentStep by remember { mutableIntStateOf(1) }
-    val userFormData = remember { UserFormData() }
-    val firestore = FirebaseFirestore.getInstance()
-    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        when (currentStep) {
-            1 -> GoalStep(
-                userFormData = userFormData,
-                navController = navController,
-                onNext = { currentStep = 2
+
+        Surface(
+            modifier = Modifier
+                .fillMaxSize(),
+            color = Color(0xFF181414)
+        ) {
+        AnimatedContent(
+            targetState = currentStep,
+            transitionSpec = {
+                if (targetState > initialState) {
+                    (slideInHorizontally(animationSpec = tween(300)) { fullWidth -> fullWidth } + fadeIn()).togetherWith(
+                        slideOutHorizontally(animationSpec = tween(300)) { fullWidth -> -fullWidth } + fadeOut())
                 }
-            )
-            2 -> GenderStep(
-                userFormData = userFormData,
-                onNext = { currentStep = 3 },
-                navController = navController
-            )
-            3 -> BirthDateStep(
-                userFormData = userFormData,
-                onNext = { currentStep = 4 },
-                navController = navController
-            )
-            4 -> InfoStep(
-                userFormData = userFormData,
-                onNext = { currentStep = 5 },
-                navController = navController
-            )
-            5 -> SummaryStep(
-                userFormData = userFormData,
-                onBack = { currentStep = 4 },
-                navController = navController,
-                onSubmit = {
-                    if (userId != null) {
-                        userFormData.formCompleted = true
-                        firestore.collection("users")
-                            .document(userId)
-                            .set(userFormData)
-                            .addOnSuccessListener {
-                                println("Register successful")
+                else {
+                    (slideInHorizontally(animationSpec = tween(300)) { fullWidth -> -fullWidth } + fadeIn()).togetherWith(
+                        slideOutHorizontally(animationSpec = tween(300)) { fullWidth -> fullWidth } + fadeOut())
+                }.using(
+                    SizeTransform(clip = false)
+                )
+            },
+            modifier = Modifier.fillMaxSize(), label = "MultiStepUserForm"
+        ) { step ->
+
+            when (step) {
+                1 -> GoalStep(
+                    navController = navController,
+                    onNext = { currentStep = 2 }
+                )
+
+                2 -> GenderStep(
+                    onNext = { currentStep = 3 },
+                    onBack = { currentStep = 1 }
+                )
+
+                3 -> BirthDateStep(
+                    onNext = { currentStep = 4 },
+                    onBack = { currentStep = 2 }
+                )
+
+                4 -> InfoStep(
+                    onNext = { currentStep = 5 },
+                    onBack = { currentStep = 3 }
+                )
+
+                5 -> SummaryStep(
+                    onSubmit = {
+                        viewModel.completeForm { success ->
+                            if (success) {
                                 navController.navigate("home") {
                                     popUpTo("multistepform") { inclusive = true }
                                 }
+                            } else {
+                                println("Data registration failed")
                             }
-                            .addOnFailureListener { e ->
-                                println("Data registration failed: ${e.message}")
-                            }
-                    }
-                }
-            )
+                        }
+                    },
+                    onBack = { currentStep = 4 }
+                )
+            }
         }
     }
 }

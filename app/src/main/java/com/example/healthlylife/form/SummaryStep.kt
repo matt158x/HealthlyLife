@@ -25,15 +25,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.data.UserFormData
 import com.example.healthlylife.presentation.damionFontFamily
+import com.example.healthlylife.viewmodel.UserFormViewModel
 
 @Composable
-fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, userFormData: UserFormData, onSubmit: () -> Unit, onBack: () -> Unit) {
+fun SummaryStep(
+    modifier: Modifier = Modifier,
+    viewModel: UserFormViewModel = hiltViewModel(),
+    onSubmit: () -> Unit,
+    onBack: () -> Unit
+){
 
-
+    val userFormData = viewModel.userFormData
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -44,7 +49,7 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
             Spacer(modifier = Modifier.height(60.dp))
 
             IconButton(
-                onClick = { navController.popBackStack() },
+                onClick = { onBack() },
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(start = 20.dp, top = 50.dp)
@@ -74,7 +79,6 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
                 )
                 Spacer(modifier = Modifier.height(30.dp))
 
-                // Sekcja wykresu
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -82,35 +86,30 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
                         .width(350.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    // Wykres
+
                     Image(
                         painter = painterResource(id = userFormData.chartImage),
                         contentDescription = "Goal Chart",
                         modifier = Modifier.fillMaxHeight()
                     )
 
-
                     Text(
-                        text = "${userFormData.currentWeight.toInt()} kg",
+                        text = "${userFormData.currentWeight} kg",
                         color = Color.White,
                         fontSize = 16.sp,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
                             .padding(10.dp)
-
                     )
 
-
                     Text(
-                        text = "${userFormData.targetWeight.toInt()} kg",
+                        text = "${userFormData.targetWeight} kg",
                         color = Color.White,
                         fontSize = 16.sp,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .padding(10.dp)
-
                     )
-
 
                     Text(
                         text = "Today",
@@ -129,10 +128,9 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
                             .align(Alignment.BottomEnd)
                             .padding(20.dp)
                     )
-
                 }
 
-                Spacer(modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
                     text = "0.5 kg / week",
@@ -140,26 +138,25 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "Recommend calories intake per day:",
+                    text = "Recommend calorie intake per day:",
                     color = Color.White,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "${userFormData.bmr.toInt()} kcal",
+                    text = "${userFormData.bmr} kcal",
                     color = Color(0XFFBADA55),
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center
-
                 )
 
-                Spacer(modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
                     text = "We recommend this weight pace for long-term success",
@@ -168,9 +165,7 @@ fun SummaryStep(modifier: Modifier = Modifier, navController: NavController, use
                     textAlign = TextAlign.Center
                 )
 
-
                 Spacer(modifier = Modifier.height(50.dp))
-                
 
                 CustomButton(
                     onClick = {

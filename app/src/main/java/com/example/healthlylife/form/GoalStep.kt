@@ -28,17 +28,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.components.CustomFormButton
-import com.example.healthlylife.data.UserFormData
 import com.example.healthlylife.presentation.damionFontFamily
+import com.example.healthlylife.viewmodel.UserFormViewModel
 
 
 @Composable
-fun GoalStep(modifier: Modifier = Modifier, navController: NavController, userFormData: UserFormData, onNext: () -> Unit) {
-
+fun GoalStep(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: UserFormViewModel = hiltViewModel(),
+    onNext: () -> Unit) {
 
     var selectedGoal by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -96,8 +100,7 @@ fun GoalStep(modifier: Modifier = Modifier, navController: NavController, userFo
                     isClicked = selectedGoal == "Gain Weight",
                     onClick = {
                         selectedGoal = "Gain Weight"
-                        userFormData.goal = selectedGoal
-                        userFormData.chartImage = R.drawable.wykres1
+                        viewModel.updateGoal("Gain Weight", R.drawable.wykres1)
                     }
                 )
 
@@ -107,8 +110,7 @@ fun GoalStep(modifier: Modifier = Modifier, navController: NavController, userFo
                     isClicked = selectedGoal == "Lose Weight",
                     onClick = {
                         selectedGoal = "Lose Weight"
-                        userFormData.goal = selectedGoal
-                        userFormData.chartImage = R.drawable.wykres2
+                        viewModel.updateGoal("Lose Weight", R.drawable.wykres2)
                     }
                 )
 
@@ -118,20 +120,17 @@ fun GoalStep(modifier: Modifier = Modifier, navController: NavController, userFo
                     isClicked = selectedGoal == "Maintain Weight",
                     onClick = {
                         selectedGoal = "Maintain Weight"
-                        userFormData.goal = selectedGoal
-                        userFormData.chartImage = R.drawable.wykres0
+                        viewModel.updateGoal("Maintain weight", R.drawable.wykres0)
                     }
                 )
-
 
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Text(
-                    text = "We use this information to calculate and provice you with \n daily perosnalized reccomendations",
+                    text = "We use this information to calculate and provide you with \n daily personalized recommendations",
                     color = Color(0xFF616161),
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
-
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -148,9 +147,8 @@ fun GoalStep(modifier: Modifier = Modifier, navController: NavController, userFo
                     textColor = Color.Black,
                     textSize = 18.sp
                 )
-
-                }
             }
         }
     }
+}
 

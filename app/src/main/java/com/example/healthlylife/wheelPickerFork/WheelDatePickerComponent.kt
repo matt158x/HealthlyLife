@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
-import network.chaintech.utils.MIN
 import network.chaintech.utils.SelectorProperties
 import network.chaintech.utils.noRippleEffect
 import network.chaintech.utils.now
@@ -126,5 +125,4 @@ object WheelDatePickerComponent {
             )
         }
     }
-
 }

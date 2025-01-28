@@ -27,15 +27,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.components.CustomFormButton
-import com.example.healthlylife.data.UserFormData
 import com.example.healthlylife.presentation.damionFontFamily
+import com.example.healthlylife.viewmodel.UserFormViewModel
 
 
 @Composable
-fun GenderStep(modifier: Modifier = Modifier, navController: NavController, userFormData: UserFormData, onNext: () -> Unit) {
+fun GenderStep(
+    modifier: Modifier = Modifier,
+    viewModel: UserFormViewModel = hiltViewModel(),
+    onNext: () -> Unit,
+    onBack: () -> Unit
+)
+    {
 
     var selectedGender by remember { mutableStateOf("")}
     val context = LocalContext.current
@@ -49,7 +55,7 @@ fun GenderStep(modifier: Modifier = Modifier, navController: NavController, user
             Spacer(modifier=Modifier.height(60.dp))
 
             IconButton(
-                onClick = { navController.popBackStack() },
+                onClick = { onBack() },
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(start = 20.dp, top = 50.dp)
@@ -93,7 +99,7 @@ fun GenderStep(modifier: Modifier = Modifier, navController: NavController, user
                     isClicked = selectedGender == "Man",
                     onClick = {
                         selectedGender = "Man"
-                        userFormData.gender = selectedGender
+                        viewModel.updateGender("Man")
                     }
                 )
                 CustomFormButton(
@@ -102,7 +108,7 @@ fun GenderStep(modifier: Modifier = Modifier, navController: NavController, user
                     isClicked = selectedGender == "Woman",
                     onClick = {
                         selectedGender = "Woman"
-                        userFormData.gender = selectedGender
+                        viewModel.updateGender("Woman")
 
                     }
                 )
@@ -110,7 +116,7 @@ fun GenderStep(modifier: Modifier = Modifier, navController: NavController, user
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Text(
-                    text = "We use this information to calculate and provice you with \n daily perosnalized reccomendations",
+                    text = "We use this information to calculate and provide you with \n daily personalized recommendations",
                     color = Color(0xFF616161),
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
@@ -118,7 +124,6 @@ fun GenderStep(modifier: Modifier = Modifier, navController: NavController, user
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-
 
                 CustomButton(
                     onClick = {

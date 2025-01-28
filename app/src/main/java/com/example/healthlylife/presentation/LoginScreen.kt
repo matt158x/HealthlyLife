@@ -51,14 +51,13 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Authenticated -> navController.navigate("home")
-            is AuthState.FormNotCompleted -> navController.navigate("form") // Przekierowanie do formularza
+            is AuthState.FormNotCompleted -> navController.navigate("form")
             is AuthState.Error -> Toast.makeText(
                 context,
                 (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT

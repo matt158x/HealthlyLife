@@ -10,8 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -22,7 +20,7 @@ fun CustomButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = Color(0xFF32CD32), // Zmieniona nazwa parametru
+    containerColor: Color = Color(0xFF32CD32),
     textColor: Color = Color.White,
     cornerRadius: Dp = 10.dp,
     enabled: Boolean = true,
@@ -35,7 +33,7 @@ fun CustomButton(
             .height(40.dp)
             .padding(horizontal = 30.dp)
             .fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(containerColor = containerColor), // Użycie containerColor
+        colors = ButtonDefaults.buttonColors(containerColor = containerColor),
         shape = RoundedCornerShape(cornerRadius)
     ) {
         Text(

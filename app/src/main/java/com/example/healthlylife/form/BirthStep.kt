@@ -25,26 +25,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.data.UserFormData
-import com.example.healthlylife.functions.calculateAge
 import com.example.healthlylife.presentation.damionFontFamily
+import com.example.healthlylife.viewmodel.UserFormViewModel
 import com.example.healthlylife.wheelPickerFork.WheelDatePickerComponent.WheelDatePicker
 import com.example.healthlylife.wheelPickerFork.WheelPickerDefaults
 
 @Composable
-fun BirthDateStep(modifier: Modifier = Modifier, navController: NavController, userFormData: UserFormData, onNext: () -> Unit) {
+fun BirthDateStep(
+    modifier: Modifier = Modifier,
+    viewModel: UserFormViewModel = hiltViewModel(),
+    onNext: () -> Unit,
+    onBack: () -> Unit
+)
 
+{
     var birthDateInput by remember { mutableStateOf("") }
-    var userAge by remember { mutableStateOf(0) }
-    val context = LocalContext.current
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -53,7 +56,7 @@ fun BirthDateStep(modifier: Modifier = Modifier, navController: NavController, u
         Box(modifier = modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.height(60.dp))
             IconButton(
-                onClick = { navController.popBackStack() },
+                onClick = { onBack() },
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(start = 20.dp, top = 50.dp)
@@ -92,8 +95,6 @@ fun BirthDateStep(modifier: Modifier = Modifier, navController: NavController, u
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-
-
                 CompositionLocalProvider(LocalContentColor provides Color.White){
                 WheelDatePicker(
                     modifier = modifier.fillMaxWidth(),
@@ -117,12 +118,10 @@ fun BirthDateStep(modifier: Modifier = Modifier, navController: NavController, u
                     hideHeader = true
                 )}
 
-
-
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Text(
-                    text = "We use this information to calculate and provice you with \n daily perosnalized reccomendations",
+                    text = "We use this information to calculate and provide you with \n daily personalized recommendations",
                     color = Color(0xFF616161),
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
@@ -131,20 +130,15 @@ fun BirthDateStep(modifier: Modifier = Modifier, navController: NavController, u
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-
                 CustomButton(onClick = {
-                    userFormData.birthDate = birthDateInput
-                    calculateAge(birthDateInput, userFormData)
-                    userFormData.age = userAge
+                    viewModel.updateBirthDate(birthDateInput)
                     onNext()
                 },
                     text = "NEXT",
                     textColor = Color.Black,
                     textSize = 18.sp
                 )
-
             }
         }
-
     }
 }

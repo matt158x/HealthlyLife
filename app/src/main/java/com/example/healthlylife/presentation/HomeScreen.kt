@@ -39,7 +39,5 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController, auth
         }) {
             Text(text = "Sign out")
         }
-
     }
-
 }
