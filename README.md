@@ -1,4 +1,4 @@
-# Healthly is a mobile application designed to support a healthy lifestyle written in Java for Android phones.
+# Healthly is a mobile application designed to support a healthy lifestyle written in Kotlin for Android phones.
 
 The application uses a database to store userdata. Healthly contains functions such as counting calories and macro,
 counting calories burned, calculating BMI, healthy recipes, training plans.
