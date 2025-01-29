@@ -14,7 +14,7 @@ Technologies:
 - Navigation Component
 - MVVM
 
-![image](https://github.com/user-attachments/assets/8f45eddd-6c98-4376-ac95-79df878eebe9)
+<img src="https://github.com/user-attachments/assets/8f45eddd-6c98-4376-ac95-79df878eebe9" width="250" height="500">
 ![image](https://github.com/user-attachments/assets/864bdbb0-ce82-4a58-9986-4ea32be1098c)
 ![image](https://github.com/user-attachments/assets/2e337ad2-dafc-49fb-8eb8-36da9fa21685)
 ![image](https://github.com/user-attachments/assets/db20ae60-63c0-4f2e-b8e8-406e229c3077)
