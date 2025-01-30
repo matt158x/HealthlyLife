@@ -7,18 +7,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.healthlylife.form.MultiStepUserForm
+import com.example.healthlylife.presentation.CaloriesScreen
 import com.example.healthlylife.presentation.HomeScreen
 import com.example.healthlylife.presentation.LoginScreen
+import com.example.healthlylife.presentation.MealsScreen
+import com.example.healthlylife.presentation.ProfileScreen
+import com.example.healthlylife.presentation.RecipesScreen
 import com.example.healthlylife.presentation.RegisterScreen
 import com.example.healthlylife.presentation.StartScreen
 
 @Composable
-fun AppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel) {
+fun AppNavigation(authViewModel: AuthViewModel) {
     val navController = rememberNavController()
     val authState by authViewModel.authState.observeAsState(AuthState.Loading)
 
@@ -32,17 +35,31 @@ fun AppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel) {
             StartScreen(navController, authViewModel)
         }
         composable("login") {
-            LoginScreen(modifier, navController, authViewModel)
+            LoginScreen(navController, authViewModel)
         }
         composable("signup") {
-            RegisterScreen(modifier, navController, authViewModel)
+            RegisterScreen(navController, authViewModel)
         }
-        composable("home") {
-            HomeScreen(modifier, navController, authViewModel)
+        composable("profile") {
+            ProfileScreen(navController, authViewModel)
         }
         composable("form") {
             MultiStepUserForm(navController)
         }
+        composable("home") {
+            HomeScreen(navController)
+        }
+        composable("calories"){
+            CaloriesScreen(navController)
+        }
+        composable("recipes") {
+            RecipesScreen(navController)
+        }
+        composable("meals") {
+            MealsScreen(navController)
+        }
+
+
     }
 
     LaunchedEffect(authState) {

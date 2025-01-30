@@ -2,6 +2,7 @@ package com.example.healthlylife.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,10 +18,8 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +46,9 @@ import com.example.healthlylife.navigation.AuthState
 import com.example.healthlylife.navigation.AuthViewModel
 
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+fun RegisterScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -55,27 +56,16 @@ fun RegisterScreen(modifier: Modifier = Modifier, navController: NavController, 
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(authState.value) {
-        when (authState.value) {
-            is AuthState.Authenticated -> navController.navigate("form")
-            is AuthState.Error -> Toast.makeText(
-                context,
-                (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT
-            ).show()
 
-            else -> Unit
-        }
-    }
-
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = Color(0xFF181414)
-    ) {
-        Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0xFF181414))
+    )
+    {
 
             IconButton(
                 onClick = { navController.navigate("start") },
-                modifier = Modifier.align(Alignment.TopStart).padding(25.dp)
+                modifier = Modifier.align(Alignment.TopStart).padding(horizontal = 30.dp, vertical = 50.dp)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -85,12 +75,15 @@ fun RegisterScreen(modifier: Modifier = Modifier, navController: NavController, 
             }
 
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .align(Alignment.TopCenter)
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                Spacer(modifier = Modifier.height(50.dp))
+
                 Image(
                     painter = painterResource(R.drawable.logo),
                     contentDescription = "logo",
@@ -106,7 +99,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, navController: NavController, 
                 )
             }
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(bottom = 58.dp),
                 verticalArrangement = Arrangement.Center,
@@ -200,4 +193,3 @@ fun RegisterScreen(modifier: Modifier = Modifier, navController: NavController, 
                 }
             }
         }
-    }

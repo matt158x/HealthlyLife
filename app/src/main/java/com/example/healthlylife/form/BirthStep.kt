@@ -1,5 +1,6 @@
 package com.example.healthlylife.form
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -39,21 +39,18 @@ import com.example.healthlylife.wheelPickerFork.WheelPickerDefaults
 
 @Composable
 fun BirthDateStep(
-    modifier: Modifier = Modifier,
     viewModel: UserFormViewModel = hiltViewModel(),
     onNext: () -> Unit,
     onBack: () -> Unit
 )
-
 {
     var birthDateInput by remember { mutableStateOf("") }
 
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color(0xFF181414)
-    ) {
-        Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0xFF181414))
+    )
+    {
             Spacer(modifier = Modifier.height(60.dp))
             IconButton(
                 onClick = { onBack() },
@@ -88,7 +85,7 @@ fun BirthDateStep(
             }
 
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
                 verticalArrangement = Arrangement.Center,
@@ -97,7 +94,7 @@ fun BirthDateStep(
 
                 CompositionLocalProvider(LocalContentColor provides Color.White){
                 WheelDatePicker(
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     dateTextColor = Color(0xFF32CD32),
                     selectorProperties = WheelPickerDefaults.selectorProperties(
                         enabled = true,
@@ -125,7 +122,6 @@ fun BirthDateStep(
                     color = Color(0xFF616161),
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center
-
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -141,4 +137,3 @@ fun BirthDateStep(
             }
         }
     }
-}

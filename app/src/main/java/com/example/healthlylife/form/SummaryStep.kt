@@ -1,6 +1,7 @@
 package com.example.healthlylife.form
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +32,6 @@ import com.example.healthlylife.viewmodel.UserFormViewModel
 
 @Composable
 fun SummaryStep(
-    modifier: Modifier = Modifier,
     viewModel: UserFormViewModel = hiltViewModel(),
     onSubmit: () -> Unit,
     onBack: () -> Unit
@@ -40,11 +39,11 @@ fun SummaryStep(
 
     val userFormData = viewModel.userFormData
 
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = Color(0xFF181414)
-    ) {
-        Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0xFF181414))
+    )
+    {
 
             Spacer(modifier = Modifier.height(60.dp))
 
@@ -178,4 +177,3 @@ fun SummaryStep(
             }
         }
     }
-}

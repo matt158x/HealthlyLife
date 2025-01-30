@@ -2,6 +2,7 @@ package com.example.healthlylife.form
 
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +39,6 @@ import com.example.healthlylife.viewmodel.UserFormViewModel
 
 @Composable
 fun GoalStep(
-    modifier: Modifier = Modifier,
     navController: NavController,
     viewModel: UserFormViewModel = hiltViewModel(),
     onNext: () -> Unit) {
@@ -47,11 +46,12 @@ fun GoalStep(
     var selectedGoal by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = Color(0xFF181414)
-    ) {
-        Box(modifier = modifier.fillMaxSize()) {
+
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0xFF181414))
+    )
+    {
 
             Spacer(modifier=Modifier.height(60.dp))
 
@@ -88,7 +88,7 @@ fun GoalStep(
         }
 
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
                 verticalArrangement = Arrangement.Center,
@@ -120,7 +120,7 @@ fun GoalStep(
                     isClicked = selectedGoal == "Maintain Weight",
                     onClick = {
                         selectedGoal = "Maintain Weight"
-                        viewModel.updateGoal("Maintain weight", R.drawable.wykres0)
+                        viewModel.updateGoal("Maintain Weight", R.drawable.wykres0)
                     }
                 )
 
@@ -150,5 +150,5 @@ fun GoalStep(
             }
         }
     }
-}
+
 

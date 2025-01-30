@@ -8,8 +8,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -27,11 +28,11 @@ fun MultiStepUserForm(navController: NavController, viewModel: UserFormViewModel
     var currentStep by remember { mutableIntStateOf(1) }
 
 
-        Surface(
-            modifier = Modifier
-                .fillMaxSize(),
-            color = Color(0xFF181414)
-        ) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0xFF181414))
+    )
+    {
         AnimatedContent(
             targetState = currentStep,
             transitionSpec = {

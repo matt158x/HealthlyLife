@@ -1,6 +1,7 @@
 package com.example.healthlylife.form
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,21 +36,21 @@ import com.example.healthlylife.viewmodel.UserFormViewModel
 
 @Composable
 fun GenderStep(
-    modifier: Modifier = Modifier,
     viewModel: UserFormViewModel = hiltViewModel(),
     onNext: () -> Unit,
     onBack: () -> Unit
 )
-    {
+{
 
     var selectedGender by remember { mutableStateOf("")}
     val context = LocalContext.current
 
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = Color(0xFF181414)
-    ) {
-        Box(modifier = modifier.fillMaxSize()) {
+
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFF181414))
+        )
+        {
 
             Spacer(modifier=Modifier.height(60.dp))
 
@@ -87,7 +87,7 @@ fun GenderStep(
             }
 
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
                 verticalArrangement = Arrangement.Center,
@@ -140,5 +140,5 @@ fun GenderStep(
             }
         }
     }
-}
+
 
