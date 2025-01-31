@@ -42,13 +42,14 @@ import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.components.CustomTextField
-import com.example.healthlylife.navigation.AuthState
-import com.example.healthlylife.navigation.AuthViewModel
+import com.example.healthlylife.viewmodel.AuthState
+import com.example.healthlylife.viewmodel.AuthViewModel
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    authViewModel: AuthViewModel) {
+    authViewModel: AuthViewModel
+) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.healthlylife.data.MealDetails
+import com.example.healthlylife.data.MealData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +21,8 @@ class FoodViewModel @Inject constructor(
     private val _foodList = mutableStateOf<List<String>>(emptyList())
     val foodList: State<List<String>> = _foodList
 
-    private val _mealDetails = mutableStateOf(MealDetails(0.0, 0.0, 0.0, 0.0))
-    val mealDetails: State<MealDetails> = _mealDetails
+    private val _mealData = mutableStateOf(MealData(0.0, 0.0, 0.0, 0.0))
+    val mealData: State<MealData> = _mealData
 
     private val _caloriesEaten = mutableDoubleStateOf(0.0)
     val caloriesEaten: State<Double> = _caloriesEaten
@@ -64,7 +64,7 @@ class FoodViewModel @Inject constructor(
                     val proteins = document.getDouble("proteins") ?: 0.0
                     val carbs = document.getDouble("carbs") ?: 0.0
 
-                    _mealDetails.value = MealDetails(calories, proteins, carbs, fat)
+                    _mealData.value = MealData(calories, proteins, carbs, fat)
                 }
             }
             .addOnFailureListener { exception ->

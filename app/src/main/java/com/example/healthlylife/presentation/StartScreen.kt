@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.navigation.AuthState
-import com.example.healthlylife.navigation.AuthViewModel
+import com.example.healthlylife.viewmodel.AuthState
+import com.example.healthlylife.viewmodel.AuthViewModel
 
 val submarinerFontFamily = FontFamily(
     Font(R.font.submariner_black_italic, weight = FontWeight.Normal)

@@ -1,6 +1,6 @@
 package com.example.healthlylife.data
 
-data class MealDetails(
+data class MealData(
     val calories: Double,
     val proteins: Double,
     val carbs: Double,

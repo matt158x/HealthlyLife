@@ -19,6 +19,8 @@ import com.example.healthlylife.presentation.ProfileScreen
 import com.example.healthlylife.presentation.RecipesScreen
 import com.example.healthlylife.presentation.RegisterScreen
 import com.example.healthlylife.presentation.StartScreen
+import com.example.healthlylife.viewmodel.AuthState
+import com.example.healthlylife.viewmodel.AuthViewModel
 
 @Composable
 fun AppNavigation(authViewModel: AuthViewModel) {

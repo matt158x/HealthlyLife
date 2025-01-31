@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.example.healthlylife.navigation.AppNavigation
-import com.example.healthlylife.navigation.AuthViewModel
+import com.example.healthlylife.viewmodel.AuthViewModel
 import com.example.healthlylife.ui.theme.HealthlyLifeTheme
 import dagger.hilt.android.AndroidEntryPoint
 

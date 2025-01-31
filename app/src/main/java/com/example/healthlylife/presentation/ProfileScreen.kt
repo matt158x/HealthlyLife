@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.navigation.AuthViewModel
+import com.example.healthlylife.viewmodel.AuthViewModel
 
 @Composable
 fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel) {

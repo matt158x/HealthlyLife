@@ -1,4 +1,4 @@
-package com.example.healthlylife.navigation
+package com.example.healthlylife.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -60,7 +60,8 @@ class AuthViewModel : ViewModel() {
                         _authState.value = AuthState.Error("User ID not found")
                     }
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }
@@ -77,7 +78,8 @@ class AuthViewModel : ViewModel() {
                 if(task.isSuccessful){
                     _authState.value = AuthState.FormNotCompleted
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message?:"Something went wrong")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "Something went wrong")
                 }
             }
     }

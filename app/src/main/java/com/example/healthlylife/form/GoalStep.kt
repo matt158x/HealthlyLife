@@ -53,20 +53,20 @@ fun GoalStep(
     )
     {
 
-            Spacer(modifier=Modifier.height(60.dp))
+        Spacer(modifier=Modifier.height(60.dp))
 
-            IconButton(
-                onClick = { navController.navigate("start") },
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(start = 20.dp, top = 50.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
+        IconButton(
+            onClick = { navController.navigate("start") },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 20.dp, top = 50.dp)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -87,68 +87,66 @@ fun GoalStep(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CustomFormButton(
-                    modifier = Modifier,
-                    text = "GAIN WEIGHT",
-                    isClicked = selectedGoal == "Gain Weight",
-                    onClick = {
-                        selectedGoal = "Gain Weight"
-                        viewModel.updateGoal("Gain Weight", R.drawable.wykres1)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomFormButton(
+                modifier = Modifier,
+                text = "GAIN WEIGHT",
+                isClicked = selectedGoal == "Gain Weight",
+                onClick = {
+                    selectedGoal = "Gain Weight"
+                    viewModel.updateGoal("Gain Weight", R.drawable.wykres1)
+                }
+            )
+
+            CustomFormButton(
+                modifier = Modifier,
+                text = "LOSE WEIGHT",
+                isClicked = selectedGoal == "Lose Weight",
+                onClick = {
+                    selectedGoal = "Lose Weight"
+                    viewModel.updateGoal("Lose Weight", R.drawable.wykres2)
+                }
+            )
+
+            CustomFormButton(
+                modifier = Modifier,
+                text = "MAINTAIN WEIGHT",
+                isClicked = selectedGoal == "Maintain Weight",
+                onClick = {
+                    selectedGoal = "Maintain Weight"
+                    viewModel.updateGoal("Maintain Weight", R.drawable.wykres0)
+                }
+            )
+
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Text(
+                text = "We use this information to calculate and provide you with \n daily personalized recommendations",
+                color = Color(0xFF616161),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            CustomButton(
+                onClick = {
+                    if (selectedGoal.isEmpty()){
+                        Toast.makeText(context, "Please select a goal to proceed", Toast.LENGTH_SHORT).show()
+                    } else {
+                        onNext()
                     }
-                )
-
-                CustomFormButton(
-                    modifier = Modifier,
-                    text = "LOSE WEIGHT",
-                    isClicked = selectedGoal == "Lose Weight",
-                    onClick = {
-                        selectedGoal = "Lose Weight"
-                        viewModel.updateGoal("Lose Weight", R.drawable.wykres2)
-                    }
-                )
-
-                CustomFormButton(
-                    modifier = Modifier,
-                    text = "MAINTAIN WEIGHT",
-                    isClicked = selectedGoal == "Maintain Weight",
-                    onClick = {
-                        selectedGoal = "Maintain Weight"
-                        viewModel.updateGoal("Maintain Weight", R.drawable.wykres0)
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(50.dp))
-
-                Text(
-                    text = "We use this information to calculate and provide you with \n daily personalized recommendations",
-                    color = Color(0xFF616161),
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                CustomButton(
-                    onClick = {
-                        if (selectedGoal.isEmpty()){
-                            Toast.makeText(context, "Please select a goal to proceed", Toast.LENGTH_SHORT).show()
-                        } else {
-                            onNext()
-                        }
-                    },
-                    text = "NEXT",
-                    textColor = Color.Black,
-                    textSize = 18.sp
-                )
-            }
+                },
+                text = "NEXT",
+                textColor = Color.Black,
+                textSize = 18.sp
+            )
         }
     }
-
-
+}

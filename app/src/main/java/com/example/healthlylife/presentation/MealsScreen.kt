@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,7 +50,7 @@ fun MealsScreen(
 ) {
     var searchText by remember { mutableStateOf("") }
     val filteredList = viewModel.foodList.value.filter { it.contains(searchText, ignoreCase = true) }
-    val mealDetails = viewModel.mealDetails.value
+    val mealDetails = viewModel.mealData.value
 
     var percentage by remember { mutableIntStateOf(100) }
     val adjustedCalories = mealDetails.calories * percentage / 100
@@ -86,30 +87,39 @@ fun MealsScreen(
                 label = { Text("Search food") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
-                colors = TextFieldDefaults.colors(Color.Gray.copy(alpha = 0.2f))
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color(0xFF292929),
+                    focusedContainerColor = Color(0xFF292929),
+                    focusedTextColor = Color.White
+                ),
+                shape = RoundedCornerShape(16.dp)
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(color = Color(0xFF292929))
             ) {
                 items(filteredList) { item ->
-                    Text(
-                        text = item,
-                        color = Color.White,
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-                            .clickable {
-                                viewModel.fetchMealDetails(item)
-                            }
-                    )
+                    ) {
+                        Text(
+                            text = item,
+                            color = Color.White,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 20.dp)
+                                .clickable {
+                                    viewModel.fetchMealDetails(item)
+                                }
+                        )
+                    }
                 }
             }
-
             Spacer(Modifier.height(50.dp))
 
                 Row(

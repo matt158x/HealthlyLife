@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,12 +46,14 @@ fun HomeScreen(
     val fatEatenFormatted = String.format(Locale.US,"%.1f", fatEaten)
 
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFF181414))
-    )
-    {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.home_background),
+                contentDescription = "Background",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+
         Spacer(modifier = Modifier.height(60.dp))
 
         IconButton(
@@ -128,7 +131,7 @@ fun HomeScreen(
                 )
             }
 
-            Spacer(Modifier.height(100.dp))
+            Spacer(Modifier.height(85.dp))
 
             Row(
                 modifier = Modifier

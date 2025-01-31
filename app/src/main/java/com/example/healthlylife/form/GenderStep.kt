@@ -46,99 +46,97 @@ fun GenderStep(
     val context = LocalContext.current
 
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFF181414))
-        )
-        {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0xFF181414))
+    )
+    {
 
-            Spacer(modifier=Modifier.height(60.dp))
+        Spacer(modifier=Modifier.height(60.dp))
 
-            IconButton(
-                onClick = { onBack() },
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(start = 20.dp, top = 50.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
+        IconButton(
+            onClick = { onBack() },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 20.dp, top = 50.dp)
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.White
+            )
+        }
 
-            Column(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-                Spacer(modifier=Modifier.height(50.dp))
+            Spacer(modifier=Modifier.height(50.dp))
 
-                Text(
-                    text = "What is your gender ?",
-                    fontFamily = damionFontFamily,
-                    color = Color.White,
-                    fontSize = 32.sp
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+            Text(
+                text = "What is your gender ?",
+                fontFamily = damionFontFamily,
+                color = Color.White,
+                fontSize = 32.sp
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CustomFormButton(
-                    modifier = Modifier,
-                    text = "MALE",
-                    isClicked = selectedGender == "Man",
-                    onClick = {
-                        selectedGender = "Man"
-                        viewModel.updateGender("Man")
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CustomFormButton(
+                modifier = Modifier,
+                text = "MALE",
+                isClicked = selectedGender == "Man",
+                onClick = {
+                    selectedGender = "Man"
+                    viewModel.updateGender("Man")
+                }
+            )
+            CustomFormButton(
+                modifier = Modifier,
+                text = "FEMALE",
+                isClicked = selectedGender == "Woman",
+                onClick = {
+                    selectedGender = "Woman"
+                    viewModel.updateGender("Woman")
+
+                }
+            )
+
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Text(
+                text = "We use this information to calculate and provide you with \n daily personalized recommendations",
+                color = Color(0xFF616161),
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            CustomButton(
+                onClick = {
+                    if (selectedGender.isEmpty()){
+                        Toast.makeText(context, "Please select a gender to proceed", Toast.LENGTH_SHORT).show()
+                    } else {
+                        onNext()
                     }
-                )
-                CustomFormButton(
-                    modifier = Modifier,
-                    text = "FEMALE",
-                    isClicked = selectedGender == "Woman",
-                    onClick = {
-                        selectedGender = "Woman"
-                        viewModel.updateGender("Woman")
-
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(50.dp))
-
-                Text(
-                    text = "We use this information to calculate and provide you with \n daily personalized recommendations",
-                    color = Color(0xFF616161),
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Center
-
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                CustomButton(
-                    onClick = {
-                        if (selectedGender.isEmpty()){
-                            Toast.makeText(context, "Please select a gender to proceed", Toast.LENGTH_SHORT).show()
-                        } else {
-                            onNext()
-                        }
-                    },
-                    text = "NEXT",
-                    textColor = Color.Black,
-                    textSize = 18.sp
-                )
-            }
+                },
+                text = "NEXT",
+                textColor = Color.Black,
+                textSize = 18.sp
+            )
         }
     }
-
-
+}

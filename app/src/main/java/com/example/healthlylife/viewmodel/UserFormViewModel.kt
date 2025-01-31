@@ -35,6 +35,7 @@ class UserFormViewModel @Inject constructor(
         repository.updateBirthDate(birthDate, age)
     }
 
+
     fun updateInfo(currentWeight: Int, targetWeight: Int, height: Int) {
         repository.updateInfo(currentWeight, targetWeight, height)
         calculateCalorieIntake(userFormData)
