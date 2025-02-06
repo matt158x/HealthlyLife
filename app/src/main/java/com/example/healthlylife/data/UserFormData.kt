@@ -9,9 +9,9 @@ data class UserFormData(
     var currentWeight: Int = 0,
     var targetWeight: Int = 0,
     var height: Int = 0,
-    var chartImage: Int = R.drawable.wykres1,
     var age: Int = 0,
     var goalData: String = "",
     var bmr: Int = 0,
-    var formCompleted: Boolean = false
+    var formCompleted: Boolean = false,
+    var chartImage: Int = R.drawable.wykres1,
 )

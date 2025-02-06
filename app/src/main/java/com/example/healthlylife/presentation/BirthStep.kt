@@ -1,4 +1,4 @@
-package com.example.healthlylife.form
+package com.example.healthlylife.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +17,8 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,19 +30,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.presentation.damionFontFamily
-import com.example.healthlylife.viewmodel.UserFormViewModel
+import com.example.healthlylife.viewmodel.BirthStepViewModel
 import com.example.healthlylife.wheelPickerFork.WheelDatePickerComponent.WheelDatePicker
 import com.example.healthlylife.wheelPickerFork.WheelPickerDefaults
+import kotlinx.datetime.LocalDate
 
 @Composable
-fun BirthDateStep(
-    viewModel: UserFormViewModel = hiltViewModel(),
+fun BirthStep(
+    viewModel: BirthStepViewModel = hiltViewModel(),
     onNext: () -> Unit,
     onBack: () -> Unit
 )
 {
-    var birthDateInput by remember { mutableStateOf("") }
+    val birthDateInput by viewModel.birthDateInput.collectAsState()
+
+
+    val initialDate = try {
+        LocalDate.parse(birthDateInput)
+    } catch (e: Exception) {
+        LocalDate(2000, 6, 15)
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -52,6 +57,7 @@ fun BirthDateStep(
     )
     {
             Spacer(modifier = Modifier.height(60.dp))
+
             IconButton(
                 onClick = { onBack() },
                 modifier = Modifier
@@ -76,7 +82,7 @@ fun BirthDateStep(
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Text(
-                    text = "What is your birth date ?",
+                    text = "Birth Date",
                     fontFamily = damionFontFamily,
                     color = Color.White,
                     fontSize = 32.sp
@@ -110,9 +116,10 @@ fun BirthDateStep(
                         )
                     ),
                     onDateChangeListener = { selectedDate ->
-                        birthDateInput = selectedDate.toString()
+                        viewModel.updateBirthDate(selectedDate.toString())
                     },
-                    hideHeader = true
+                    hideHeader = true,
+                    startDate = initialDate
                 )}
 
                 Spacer(modifier = Modifier.height(50.dp))

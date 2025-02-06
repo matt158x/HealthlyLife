@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.example.healthlylife.navigation.AppNavigation
-import com.example.healthlylife.viewmodel.AuthViewModel
 import com.example.healthlylife.ui.theme.HealthlyLifeTheme
+import com.example.healthlylife.viewmodel.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val authViewModel : AuthViewModel by viewModels()
+        val sharedViewModel : SharedViewModel by viewModels()
         setContent {
             enableEdgeToEdge(
                 statusBarStyle = SystemBarStyle.dark(Color.Transparent.toArgb())
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
             HealthlyLifeTheme(dynamicColor = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) {
                     AppNavigation(
-                        authViewModel = authViewModel
+                        sharedViewModel = sharedViewModel
                     )
                 }
             }

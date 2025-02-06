@@ -7,10 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.healthlylife.form.MultiStepUserForm
+import com.example.healthlylife.presentation.MultiStepUserForm
 import com.example.healthlylife.presentation.CaloriesScreen
 import com.example.healthlylife.presentation.HomeScreen
 import com.example.healthlylife.presentation.LoginScreen
@@ -19,31 +20,31 @@ import com.example.healthlylife.presentation.ProfileScreen
 import com.example.healthlylife.presentation.RecipesScreen
 import com.example.healthlylife.presentation.RegisterScreen
 import com.example.healthlylife.presentation.StartScreen
-import com.example.healthlylife.viewmodel.AuthState
-import com.example.healthlylife.viewmodel.AuthViewModel
+import com.example.healthlylife.auth.AuthState
+import com.example.healthlylife.viewmodel.SharedViewModel
 
 @Composable
-fun AppNavigation(authViewModel: AuthViewModel) {
+fun AppNavigation(sharedViewModel: SharedViewModel = viewModel()) {
     val navController = rememberNavController()
-    val authState by authViewModel.authState.observeAsState(AuthState.Loading)
+    val authState by sharedViewModel.authState.observeAsState(AuthState.Loading)
 
     NavHost(
         navController = navController,
         startDestination = "start",
         enterTransition = { fadeIn(animationSpec = tween(300)) },
-                exitTransition = { fadeOut(animationSpec = tween(300)) }
+        exitTransition = { fadeOut(animationSpec = tween(300)) }
     ) {
         composable("start") {
-            StartScreen(navController, authViewModel)
+            StartScreen(navController, sharedViewModel)
         }
         composable("login") {
-            LoginScreen(navController, authViewModel)
+            LoginScreen(navController, sharedViewModel)
         }
         composable("signup") {
-            RegisterScreen(navController, authViewModel)
+            RegisterScreen(navController, sharedViewModel)
         }
         composable("profile") {
-            ProfileScreen(navController, authViewModel)
+            ProfileScreen(navController, sharedViewModel)
         }
         composable("form") {
             MultiStepUserForm(navController)

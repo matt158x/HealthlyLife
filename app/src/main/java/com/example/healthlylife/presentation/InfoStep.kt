@@ -1,4 +1,4 @@
-package com.example.healthlylife.form
+package com.example.healthlylife.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +17,8 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,36 +27,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.presentation.damionFontFamily
-import com.example.healthlylife.viewmodel.UserFormViewModel
+import com.example.healthlylife.viewmodel.InfoStepViewModel
 
 
 @Composable
 fun InfoStep(
-    viewModel: UserFormViewModel = hiltViewModel(),
+    viewModel: InfoStepViewModel = hiltViewModel(),
     onNext: () -> Unit,
     onBack: () -> Unit
 ) {
+    val goal by viewModel.goal.collectAsState()
+    val selectedCurrentWeight by viewModel.selectedCurrentWeight.collectAsState(80)
+    val selectedHeight by viewModel.selectedHeightFlow.collectAsState(180)
 
-    val goal = viewModel.userFormData.goal
-    var weight by remember { mutableIntStateOf(80) }
-    var height by remember { mutableIntStateOf(170) }
+
+    val selectedTargetWeight by viewModel.selectedTargetWeightFlow.collectAsState(
+        if (goal == "Maintain Weight") selectedCurrentWeight else 80
+    )
 
     val targetWeightRange = when (goal) {
-        "Gain Weight" -> weight.toFloat()..200f
-        "Lose Weight" -> 30f..weight.toFloat()
-        "Maintain Weight" -> weight.toFloat()..weight.toFloat()
+        "Gain Weight" -> selectedCurrentWeight.toFloat()..200f
+        "Lose Weight" -> 30f..selectedCurrentWeight.toFloat()
+        "Maintain Weight" -> selectedCurrentWeight.toFloat()..selectedCurrentWeight.toFloat()
         else -> 30f..130f
     }
-
-    val initialTargetWeight = when (goal) {
-        "Gain Weight" -> (weight + 130) / 2
-        "Lose Weight" -> (30 + weight) / 2
-        "Maintain Weight" -> weight.toFloat()
-        else -> 80f
-    }
-
-    var targetWeight by remember { mutableIntStateOf(initialTargetWeight.toInt()) }
 
     val sliderColors = SliderDefaults.colors(
         thumbColor = Color(0xFF32CD32),
@@ -68,9 +60,10 @@ fun InfoStep(
         inactiveTickColor = Color(0xFF616161)
     )
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color(0xFF181414))
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color(0xFF181414))
     ) {
         Spacer(modifier = Modifier.height(60.dp))
 
@@ -94,11 +87,28 @@ fun InfoStep(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(
-                text = "What is your height ?",
+                text = "Your Information's",
+                fontFamily = damionFontFamily,
+                color = Color.White,
+                fontSize = 32.sp
+
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Text(
+                text = "Height?",
                 fontFamily = damionFontFamily,
                 color = Color.White,
                 fontSize = 32.sp
@@ -106,8 +116,10 @@ fun InfoStep(
             Spacer(modifier = Modifier.height(16.dp))
 
             Slider(
-                value = height.toFloat(),
-                onValueChange = { height = it.toInt() },
+                value = selectedHeight.toFloat(),
+                onValueChange = { newHeight ->
+                    viewModel.updateSelectedHeight(newHeight.toInt())
+                },
                 valueRange = 120f..220f,
                 steps = 100,
                 colors = sliderColors,
@@ -118,15 +130,16 @@ fun InfoStep(
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "$height cm",
+                text = "$selectedHeight cm",
                 fontFamily = damionFontFamily,
                 color = Color.White,
                 fontSize = 22.sp
             )
             Spacer(modifier = Modifier.height(30.dp))
 
+
             Text(
-                text = "What is your current weight ?",
+                text = "Current Weight",
                 fontFamily = damionFontFamily,
                 color = Color.White,
                 fontSize = 32.sp
@@ -134,8 +147,10 @@ fun InfoStep(
             Spacer(modifier = Modifier.height(16.dp))
 
             Slider(
-                value = weight.toFloat(),
-                onValueChange = { weight = it.toInt() },
+                value = selectedCurrentWeight.toFloat(),
+                onValueChange = { newWeight ->
+                    viewModel.updateSelectedCurrentWeight(newWeight.toInt())
+                },
                 valueRange = 30f..200f,
                 steps = 110,
                 colors = sliderColors,
@@ -146,16 +161,17 @@ fun InfoStep(
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "$weight kg",
+                text = "$selectedCurrentWeight kg",
                 fontFamily = damionFontFamily,
                 color = Color.White,
                 fontSize = 22.sp
             )
             Spacer(modifier = Modifier.height(30.dp))
 
+
             if (goal != "Maintain Weight") {
                 Text(
-                    text = "What is your target weight ?",
+                    text = "Goal Weight",
                     fontFamily = damionFontFamily,
                     color = Color.White,
                     fontSize = 32.sp
@@ -163,9 +179,9 @@ fun InfoStep(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Slider(
-                    value = targetWeight.toFloat(),
-                    onValueChange = { newValue ->
-                        targetWeight = newValue.toInt().coerceIn(targetWeightRange.start.toInt(), targetWeightRange.endInclusive.toInt())
+                    value = selectedTargetWeight.toFloat(),
+                    onValueChange = { newTargetWeight ->
+                        viewModel.updateSelectedTargetWeight(newTargetWeight.toInt())
                     },
                     valueRange = targetWeightRange,
                     steps = 50,
@@ -177,7 +193,7 @@ fun InfoStep(
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = "$targetWeight kg",
+                    text = "$selectedTargetWeight kg",
                     fontFamily = damionFontFamily,
                     color = Color.White,
                     fontSize = 22.sp
@@ -193,15 +209,20 @@ fun InfoStep(
                 textAlign = TextAlign.Center
             )
 
+
             Spacer(modifier = Modifier.height(20.dp))
 
-            CustomButton(onClick = {
-                if (goal == "Maintain Weight") {
-                    targetWeight = weight
-                }
-                viewModel.updateInfo(weight, targetWeight, height)
-                onNext()
-            },
+            CustomButton(
+                onClick = {
+                    if (goal == "Maintain Weight") {
+                        viewModel.updateSelectedTargetWeight(selectedCurrentWeight)
+                    }
+                    viewModel.updateSelectedCurrentWeight(selectedCurrentWeight)
+                    viewModel.updateSelectedTargetWeight(selectedTargetWeight)
+                    viewModel.updateSelectedHeight(selectedHeight)
+                    viewModel.calculateAll()
+                    onNext()
+                },
                 text = "NEXT",
                 textColor = Color.Black,
                 textSize = 18.sp

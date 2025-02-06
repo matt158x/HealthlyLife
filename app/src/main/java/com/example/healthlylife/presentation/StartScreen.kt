@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.viewmodel.AuthState
-import com.example.healthlylife.viewmodel.AuthViewModel
+import com.example.healthlylife.auth.AuthState
+import com.example.healthlylife.viewmodel.SharedViewModel
 
 val submarinerFontFamily = FontFamily(
     Font(R.font.submariner_black_italic, weight = FontWeight.Normal)
@@ -41,7 +41,7 @@ val damionFontFamily = FontFamily(
 
 
 @Composable
-fun StartScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun StartScreen(navController: NavController, sharedViewModel: SharedViewModel) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -97,7 +97,12 @@ fun StartScreen(navController: NavController, authViewModel: AuthViewModel) {
 
             CustomButton(
                 text = "GET STARTED",
-                onClick = { navController.navigate("signup") }
+                onClick = {
+                    sharedViewModel.checkAuthStatus()
+                    if (sharedViewModel.authState.value == AuthState.Unauthenticated) {
+                        navController.navigate("signup")
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -119,10 +124,7 @@ fun StartScreen(navController: NavController, authViewModel: AuthViewModel) {
                 fontFamily = FontFamily.SansSerif,
                 modifier = Modifier.clickable {
 
-                    authViewModel.checkAuthStatus()
-                    if (authViewModel.authState.value == AuthState.Unauthenticated) {
                         navController.navigate("login")
-                    }
                 }
             )
             Spacer(modifier = Modifier.height(50.dp))

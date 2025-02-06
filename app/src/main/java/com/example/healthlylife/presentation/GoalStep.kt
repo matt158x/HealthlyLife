@@ -1,4 +1,4 @@
-package com.example.healthlylife.form
+package com.example.healthlylife.presentation
 
 
 import android.widget.Toast
@@ -17,10 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,25 +31,24 @@ import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.components.CustomFormButton
-import com.example.healthlylife.presentation.damionFontFamily
-import com.example.healthlylife.viewmodel.UserFormViewModel
+import com.example.healthlylife.viewmodel.GoalStepViewModel
 
 
 @Composable
 fun GoalStep(
     navController: NavController,
-    viewModel: UserFormViewModel = hiltViewModel(),
+    viewModel: GoalStepViewModel = hiltViewModel(),
     onNext: () -> Unit) {
 
-    var selectedGoal by remember { mutableStateOf("") }
+    val selectedGoal by viewModel.selectedGoal.collectAsState()
+    val selectedChartImage by viewModel.selectedChartImage.collectAsState()
     val context = LocalContext.current
 
 
     Box(modifier = Modifier
         .fillMaxSize()
         .background(color = Color(0xFF181414))
-    )
-    {
+    ) {
 
         Spacer(modifier=Modifier.height(60.dp))
 
@@ -97,30 +94,30 @@ fun GoalStep(
             CustomFormButton(
                 modifier = Modifier,
                 text = "GAIN WEIGHT",
-                isClicked = selectedGoal == "Gain Weight",
+                isClicked = selectedGoal == "Gain Weight" && selectedChartImage == R.drawable.wykres1,
                 onClick = {
-                    selectedGoal = "Gain Weight"
-                    viewModel.updateGoal("Gain Weight", R.drawable.wykres1)
+                    viewModel.updateGoal("Gain Weight")
+                    viewModel.updateChartImage(R.drawable.wykres1)
                 }
             )
 
             CustomFormButton(
                 modifier = Modifier,
                 text = "LOSE WEIGHT",
-                isClicked = selectedGoal == "Lose Weight",
+                isClicked = selectedGoal == "Lose Weight" && selectedChartImage == R.drawable.wykres2,
                 onClick = {
-                    selectedGoal = "Lose Weight"
-                    viewModel.updateGoal("Lose Weight", R.drawable.wykres2)
+                    viewModel.updateGoal("Lose Weight")
+                    viewModel.updateChartImage(R.drawable.wykres2)
                 }
             )
 
             CustomFormButton(
                 modifier = Modifier,
                 text = "MAINTAIN WEIGHT",
-                isClicked = selectedGoal == "Maintain Weight",
+                isClicked = selectedGoal == "Maintain Weight" && selectedChartImage == R.drawable.wykres0,
                 onClick = {
-                    selectedGoal = "Maintain Weight"
-                    viewModel.updateGoal("Maintain Weight", R.drawable.wykres0)
+                    viewModel.updateGoal("Maintain Weight")
+                    viewModel.updateChartImage(R.drawable.wykres0)
                 }
             )
 

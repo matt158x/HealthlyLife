@@ -1,5 +1,6 @@
 package com.example.healthlylife.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,8 +29,8 @@ import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButtonHome
 import com.example.healthlylife.viewmodel.FoodViewModel
-import java.util.Locale
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -41,9 +42,9 @@ fun HomeScreen(
     val carbsEaten = viewModel.carbsEaten.value
     val fatEaten = viewModel.fatEaten.value
 
-    val proteinsEatenFormatted = String.format(Locale.US,"%.1f", proteinsEaten)
-    val carbsEatenFormatted = String.format(Locale.US,"%.1f", carbsEaten)
-    val fatEatenFormatted = String.format(Locale.US,"%.1f", fatEaten)
+    val proteinsEatenFormatted = String.format("%.1f", proteinsEaten)
+    val carbsEatenFormatted = String.format("%.1f", carbsEaten)
+    val fatEatenFormatted = String.format("%.1f", fatEaten)
 
 
         Box(modifier = Modifier.fillMaxSize()) {

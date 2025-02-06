@@ -1,4 +1,4 @@
-package com.example.healthlylife.form
+package com.example.healthlylife.presentation
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
@@ -20,13 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.healthlylife.viewmodel.UserFormViewModel
+import com.example.healthlylife.viewmodel.MultiStepUserFormViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun MultiStepUserForm(navController: NavController, viewModel: UserFormViewModel = hiltViewModel()) {
+fun MultiStepUserForm(navController: NavController, viewModel: MultiStepUserFormViewModel = hiltViewModel()) {
     var currentStep by remember { mutableIntStateOf(1) }
-
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -61,7 +62,7 @@ fun MultiStepUserForm(navController: NavController, viewModel: UserFormViewModel
                     onBack = { currentStep = 1 }
                 )
 
-                3 -> BirthDateStep(
+                3 -> BirthStep(
                     onNext = { currentStep = 4 },
                     onBack = { currentStep = 2 }
                 )
@@ -73,14 +74,18 @@ fun MultiStepUserForm(navController: NavController, viewModel: UserFormViewModel
 
                 5 -> SummaryStep(
                     onSubmit = {
-                        viewModel.completeForm { success ->
-                            if (success) {
-                                navController.navigate("home") {
-                                    popUpTo("multistepform") { inclusive = true }
+                        if (userId != null) {
+                            viewModel.completeForm(userId) { success ->
+                                if (success) {
+                                    navController.navigate("home") {
+                                        popUpTo("multistepform") { inclusive = true }
+                                    }
+                                } else {
+                                    println("Data registration failed")
                                 }
-                            } else {
-                                println("Data registration failed")
                             }
+                        } else {
+                            println("User ID is null")
                         }
                     },
                     onBack = { currentStep = 4 }

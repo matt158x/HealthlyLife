@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -38,24 +39,42 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.components.CustomTextField
-import com.example.healthlylife.viewmodel.AuthState
-import com.example.healthlylife.viewmodel.AuthViewModel
+import com.example.healthlylife.auth.AuthState
+import com.example.healthlylife.viewmodel.RegisterScreenViewModel
+import com.example.healthlylife.viewmodel.SharedViewModel
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    authViewModel: AuthViewModel
+    sharedViewModel: SharedViewModel = viewModel(),
+    registerViewModel: RegisterScreenViewModel = viewModel { RegisterScreenViewModel(sharedViewModel) }
 ) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-    val authState = authViewModel.authState.observeAsState()
+    val authState by sharedViewModel.authState.observeAsState(AuthState.Loading)
     val context = LocalContext.current
+
+
+    LaunchedEffect(authState) {
+        when (authState) {
+            is AuthState.PasswordMismatch -> {
+                val errorMessage = (authState as AuthState.PasswordMismatch).message
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+            is AuthState.UserExists -> {
+                val errorMessage = (authState as AuthState.UserExists).message
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+            else -> Unit
+        }
+    }
 
 
     Box(modifier = Modifier
@@ -155,18 +174,9 @@ fun RegisterScreen(
                     CustomButton(
                         text = "REGISTER",
                         onClick = {
-                            if (password == confirmPassword) {
-                                authViewModel.signup(email, password)
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Passwords do not match",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-
-                            }
+                                registerViewModel.signup(email, password, confirmPassword)
                         },
-                        enabled = authState.value != AuthState.Loading,
+                        enabled = authState != AuthState.Loading,
                         textColor = Color.Black
                     )
 
@@ -175,7 +185,6 @@ fun RegisterScreen(
                     Text(
                         buildAnnotatedString {
                             append("Already have an account ? ")
-
                             withStyle(
                                 style = SpanStyle(
                                     color = Color(0xFF32CD32),

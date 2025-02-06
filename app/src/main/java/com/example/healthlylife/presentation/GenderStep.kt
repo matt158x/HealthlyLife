@@ -1,4 +1,4 @@
-package com.example.healthlylife.form
+package com.example.healthlylife.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -16,10 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,27 +28,25 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.components.CustomFormButton
-import com.example.healthlylife.presentation.damionFontFamily
-import com.example.healthlylife.viewmodel.UserFormViewModel
+import com.example.healthlylife.viewmodel.GenderStepViewModel
 
 
 @Composable
 fun GenderStep(
-    viewModel: UserFormViewModel = hiltViewModel(),
+    viewModel: GenderStepViewModel = hiltViewModel(),
     onNext: () -> Unit,
     onBack: () -> Unit
 )
 {
 
-    var selectedGender by remember { mutableStateOf("")}
+    val selectedGender by viewModel.selectedGender.collectAsState()
     val context = LocalContext.current
 
 
     Box(modifier = Modifier
         .fillMaxSize()
         .background(color = Color(0xFF181414))
-    )
-    {
+    ) {
 
         Spacer(modifier=Modifier.height(60.dp))
 
@@ -98,7 +94,6 @@ fun GenderStep(
                 text = "MALE",
                 isClicked = selectedGender == "Man",
                 onClick = {
-                    selectedGender = "Man"
                     viewModel.updateGender("Man")
                 }
             )
@@ -107,9 +102,7 @@ fun GenderStep(
                 text = "FEMALE",
                 isClicked = selectedGender == "Woman",
                 onClick = {
-                    selectedGender = "Woman"
                     viewModel.updateGender("Woman")
-
                 }
             )
 

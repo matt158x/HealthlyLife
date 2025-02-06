@@ -15,12 +15,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.viewmodel.AuthViewModel
+import com.example.healthlylife.viewmodel.ProfileScreenViewModel
+import com.example.healthlylife.viewmodel.SharedViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun ProfileScreen(
+    navController: NavController,
+    sharedViewModel: SharedViewModel = viewModel(),
+    profileScreenViewModel: ProfileScreenViewModel = viewModel { ProfileScreenViewModel(sharedViewModel) }
+) {
 
 
     Box(modifier = Modifier
@@ -48,7 +54,7 @@ fun ProfileScreen(navController: NavController, authViewModel: AuthViewModel) {
                 text = "Log out",
                 modifier = Modifier.align(Alignment.Center),
                 onClick = {
-                authViewModel.signout()
+                    profileScreenViewModel.signOut()
             },
                 textColor = Color.Black
             )
