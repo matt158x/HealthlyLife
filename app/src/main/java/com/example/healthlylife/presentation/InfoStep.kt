@@ -1,5 +1,6 @@
 package com.example.healthlylife.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +41,7 @@ fun InfoStep(
     val goal by viewModel.goal.collectAsState()
     val selectedCurrentWeight by viewModel.selectedCurrentWeight.collectAsState(80)
     val selectedHeight by viewModel.selectedHeightFlow.collectAsState(180)
-
+    val context = LocalContext.current
 
     val selectedTargetWeight by viewModel.selectedTargetWeightFlow.collectAsState(
         if (goal == "Maintain Weight") selectedCurrentWeight else 80
@@ -47,9 +49,9 @@ fun InfoStep(
 
     val targetWeightRange = when (goal) {
         "Gain Weight" -> selectedCurrentWeight.toFloat()..200f
-        "Lose Weight" -> 30f..selectedCurrentWeight.toFloat()
+        "Lose Weight" -> 0f..selectedCurrentWeight.toFloat()
         "Maintain Weight" -> selectedCurrentWeight.toFloat()..selectedCurrentWeight.toFloat()
-        else -> 30f..130f
+        else -> 0f..130f
     }
 
     val sliderColors = SliderDefaults.colors(
@@ -151,8 +153,8 @@ fun InfoStep(
                 onValueChange = { newWeight ->
                     viewModel.updateSelectedCurrentWeight(newWeight.toInt())
                 },
-                valueRange = 30f..200f,
-                steps = 110,
+                valueRange = 0f..200f,
+                steps = 200,
                 colors = sliderColors,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -214,14 +216,26 @@ fun InfoStep(
 
             CustomButton(
                 onClick = {
-                    if (goal == "Maintain Weight") {
-                        viewModel.updateSelectedTargetWeight(selectedCurrentWeight)
+                    if (selectedHeight == 0 || selectedCurrentWeight == 0 || selectedTargetWeight == 0) {
+                        Toast.makeText(context, "Enter your data", Toast.LENGTH_SHORT).show()
+                    } else {
+                        if (goal == "Gain Weight" && selectedTargetWeight <= selectedCurrentWeight) {
+                            Toast.makeText(context, "Target weight must be greater than current weight", Toast.LENGTH_SHORT).show()
+                        } else if (goal == "Lose Weight" && selectedTargetWeight >= selectedCurrentWeight) {
+                            Toast.makeText(context, "Target weight must be less than current weight", Toast.LENGTH_SHORT).show()
+                        } else {
+                            if (goal == "Maintain Weight") {
+                                viewModel.updateSelectedTargetWeight(selectedCurrentWeight)
+                            } else {
+                                viewModel.updateSelectedTargetWeight(selectedTargetWeight)
+                            }
+                            viewModel.updateSelectedCurrentWeight(selectedCurrentWeight)
+                            viewModel.updateSelectedHeight(selectedHeight)
+                            viewModel.calculateAll()
+
+                            onNext()
+                        }
                     }
-                    viewModel.updateSelectedCurrentWeight(selectedCurrentWeight)
-                    viewModel.updateSelectedTargetWeight(selectedTargetWeight)
-                    viewModel.updateSelectedHeight(selectedHeight)
-                    viewModel.calculateAll()
-                    onNext()
                 },
                 text = "NEXT",
                 textColor = Color.Black,

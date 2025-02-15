@@ -28,13 +28,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButtonHome
-import com.example.healthlylife.viewmodel.FoodViewModel
+import com.example.healthlylife.viewmodel.HomeScreenViewModel
 
 @SuppressLint("DefaultLocale")
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: FoodViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
     val caloriesEaten = viewModel.caloriesEaten.value
@@ -137,7 +137,7 @@ fun HomeScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
+                    .height(60.dp)
                     .padding(horizontal = 20.dp)
                     .background(Color(0xFF292929), shape = RoundedCornerShape(12.dp))
                     .padding(horizontal = 10.dp),

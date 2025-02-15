@@ -1,6 +1,8 @@
 package com.example.healthlylife
 
 import android.annotation.SuppressLint
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -19,14 +21,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.clearPrimaryClip()
         val sharedViewModel : SharedViewModel by viewModels()
         setContent {
             enableEdgeToEdge(
                 statusBarStyle = SystemBarStyle.dark(Color.Transparent.toArgb())
+
             )
             HealthlyLifeTheme(dynamicColor = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) {

@@ -3,6 +3,7 @@ package com.example.healthlylife.presentation
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,24 +34,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.components.CustomAddButton
 import com.example.healthlylife.components.CustomButton
-import com.example.healthlylife.viewmodel.FoodViewModel
+import com.example.healthlylife.viewmodel.MealsScreenViewModel
 import java.util.Locale
 
 @Composable
 fun MealsScreen(
     navController: NavController,
-    viewModel: FoodViewModel = hiltViewModel()
+    viewModel: MealsScreenViewModel = hiltViewModel()
 ) {
     var searchText by remember { mutableStateOf("") }
+    var isDropdownOpen by remember { mutableStateOf(false) }
     val filteredList = viewModel.foodList.value.filter { it.contains(searchText, ignoreCase = true) }
     val mealDetails = viewModel.mealData.value
+    val mealName = viewModel.mealName.value
 
     var percentage by remember { mutableIntStateOf(100) }
     val adjustedCalories = mealDetails.calories * percentage / 100
@@ -58,13 +64,21 @@ fun MealsScreen(
     val adjustedCarbs = mealDetails.carbs * percentage / 100
     val adjustedFat = mealDetails.fat * percentage / 100
 
+    val focusManager = LocalFocusManager.current
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFF181414))
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    isDropdownOpen = false
+                    focusManager.clearFocus()
+                })
+            }
     ) {
         Spacer(modifier = Modifier.height(60.dp))
+
         IconButton(
             onClick = { navController.popBackStack() },
             modifier = Modifier
@@ -78,98 +92,154 @@ fun MealsScreen(
             )
         }
 
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            Spacer(modifier = Modifier.height(100.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
 
-            TextField(
-                value = searchText,
-                onValueChange = { searchText = it },
-                label = { Text("Search food") },
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color(0xFF292929),
-                    focusedContainerColor = Color(0xFF292929),
-                    focusedTextColor = Color.White
-                ),
-                shape = RoundedCornerShape(16.dp)
-            )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(color = Color(0xFF292929))
-            ) {
-                items(filteredList) { item ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text(
-                            text = item,
-                            color = Color.White,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 20.dp)
-                                .clickable {
-                                    viewModel.fetchMealDetails(item)
-                                }
-                        )
-                    }
-                }
-            }
-            Spacer(Modifier.height(50.dp))
+            Spacer(Modifier.height(100.dp))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .background(Color(0xFF292929), shape = RoundedCornerShape(12.dp))
-                        .padding(horizontal = 10.dp)
-                        .padding(vertical = 5.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                ) {
-                    MacroNutrientItem(label = "Calories", value =  String.format(Locale.US, "%.1f", adjustedCalories))
-                    MacroNutrientItem(label = "Proteins", value = String.format(Locale.US, "%.1f", adjustedProteins))
-                    MacroNutrientItem(label = "Carbs", value = String.format(Locale.US, "%.1f", adjustedCarbs))
-                    MacroNutrientItem(label = "Fat", value = String.format(Locale.US, "%.1f", adjustedFat))
-                }
-
-            Spacer(Modifier.height(30.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
+
+            TextField(
+                value = searchText,
+                onValueChange = {
+                    searchText = it
+                    isDropdownOpen = true
+                },
+                label = { Text("Search food") },
+                modifier = Modifier
+                    .weight(1f)
+                    .onFocusChanged { focusState ->
+                        isDropdownOpen = focusState.isFocused
+                    },
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search Icon") },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color(0xFF292929),
+                    focusedContainerColor = Color(0xFF292929),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(16.dp)
+            )
+
+                Spacer(modifier = Modifier.width(8.dp)) // Dodaje odstęp między TextField a przyciskiem
+
                 CustomAddButton(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp),
+                        .height(50.dp)
+                        .width(60.dp)
+                        .background(Color(0xFF292929), shape = RoundedCornerShape(12.dp)),
+                    text = "+",
+                    onClick = { navController.navigate("meals_add") }
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            ) {
+                if (isDropdownOpen && filteredList.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(color = Color(0xFF292929))
+                    ) {
+                        items(filteredList) { item ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)
+                            ) {
+                                Text(
+                                    text = item,
+                                    color = Color.White,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 20.dp)
+                                        .clickable {
+                                            searchText = item
+                                            isDropdownOpen = false
+                                            focusManager.clearFocus()
+                                            viewModel.fetchMealDetails(item)
+                                        }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally),
+                text = mealName,
+                color = Color.White,
+                fontSize = 26.sp,
+                fontFamily = submarinerFontFamily
+            )
+
+            Spacer(Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .background(Color(0xFF292929), shape = RoundedCornerShape(12.dp))
+                    .padding(horizontal = 10.dp, vertical = 5.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                MacroNutrientItem(label = "Calories", value = String.format(Locale.US, "%.1f", adjustedCalories))
+                MacroNutrientItem(label = "Proteins", value = String.format(Locale.US, "%.1f", adjustedProteins))
+                MacroNutrientItem(label = "Carbs", value = String.format(Locale.US, "%.1f", adjustedCarbs))
+                MacroNutrientItem(label = "Fat", value = String.format(Locale.US, "%.1f", adjustedFat))
+            }
+
+            Spacer(Modifier.height(30.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CustomAddButton(
+                    modifier = Modifier.padding(horizontal = 20.dp),
                     text = "-",
                     onClick = { if (percentage > 5) percentage -= 5 }
                 )
-                Text(
-                    text = "$percentage",
-                    color = Color.White,
-                    fontSize = 22.sp,
 
+                Text(
+                    text = "$percentage g",
+                    color = Color.White,
+                    fontSize = 22.sp
                 )
+
                 CustomAddButton(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp),
+                    modifier = Modifier.padding(horizontal = 20.dp),
                     text = "+",
                     onClick = { percentage += 5 }
-                    )
+                )
             }
 
             Spacer(Modifier.height(50.dp))
 
             CustomButton(
                 text = "ADD",
-                textColor = Color.White,
+                textColor = Color.Black,
                 textSize = 18.sp,
                 onClick = {
                     viewModel.addMealToFirestore(
@@ -187,12 +257,7 @@ fun MealsScreen(
                         }
                     )
                 },
-                modifier = Modifier
-                    .width(150.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp)
             )
-            }
         }
     }
-
+}

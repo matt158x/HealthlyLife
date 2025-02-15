@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.healthlylife.R
-import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.auth.AuthState
+import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.viewmodel.SharedViewModel
 
 val submarinerFontFamily = FontFamily(
@@ -41,7 +41,9 @@ val damionFontFamily = FontFamily(
 
 
 @Composable
-fun StartScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+fun StartScreen(
+    navController: NavController,
+    sharedViewModel: SharedViewModel) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(

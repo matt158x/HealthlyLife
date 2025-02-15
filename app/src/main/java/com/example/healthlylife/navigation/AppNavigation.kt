@@ -11,16 +11,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.healthlylife.presentation.MultiStepUserForm
+import com.example.healthlylife.auth.AuthState
 import com.example.healthlylife.presentation.CaloriesScreen
 import com.example.healthlylife.presentation.HomeScreen
 import com.example.healthlylife.presentation.LoginScreen
+import com.example.healthlylife.presentation.MealsAddScreen
 import com.example.healthlylife.presentation.MealsScreen
+import com.example.healthlylife.presentation.MultiStepUserForm
 import com.example.healthlylife.presentation.ProfileScreen
 import com.example.healthlylife.presentation.RecipesScreen
 import com.example.healthlylife.presentation.RegisterScreen
 import com.example.healthlylife.presentation.StartScreen
-import com.example.healthlylife.auth.AuthState
 import com.example.healthlylife.viewmodel.SharedViewModel
 
 @Composable
@@ -61,7 +62,9 @@ fun AppNavigation(sharedViewModel: SharedViewModel = viewModel()) {
         composable("meals") {
             MealsScreen(navController)
         }
-
+        composable("meals_add") {
+            MealsAddScreen(navController)
+        }
 
     }
 

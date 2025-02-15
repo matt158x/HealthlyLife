@@ -2,92 +2,91 @@ package com.example.healthlylife.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.healthlylife.data.MealData
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 
 @HiltViewModel
-class FoodViewModel @Inject constructor(
-    private val db: FirebaseFirestore,
-    private val auth: FirebaseAuth
+class MealsScreenViewModel @Inject constructor(
+    private val db: FirebaseFirestore
 ) : ViewModel() {
 
     private val _foodList = mutableStateOf<List<String>>(emptyList())
     val foodList: State<List<String>> = _foodList
 
-    private val _mealData = mutableStateOf(MealData(0.0, 0.0, 0.0, 0.0))
+    private val _mealData = mutableStateOf(MealData("",0.0, 0.0, 0.0, 0.0))
     val mealData: State<MealData> = _mealData
 
-    private val _caloriesEaten = mutableDoubleStateOf(0.0)
-    val caloriesEaten: State<Double> = _caloriesEaten
+    private val _mealName = mutableStateOf("")
+    val mealName: State<String> = _mealName
 
-    private val _proteinsEaten = mutableDoubleStateOf(0.0)
-    val proteinsEaten: State<Double> = _proteinsEaten
-
-    private val _carbsEaten = mutableDoubleStateOf(0.0)
-    val carbsEaten: State<Double> = _carbsEaten
-
-    private val _fatEaten = mutableDoubleStateOf(0.0)
-    val fatEaten: State<Double> = _fatEaten
 
     init {
         fetchFoodItems()
-        fetchEatenData()
     }
 
 
     private fun fetchFoodItems() {
-        db.collection("food")
-            .get()
-            .addOnSuccessListener { documents ->
-                _foodList.value = documents.mapNotNull { it.id }
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val globalFoodRef = db.collection("food").get()
+        val userFoodRef = db.collection("users").document(userId).collection("food").get()
+
+        Tasks.whenAllSuccess<QuerySnapshot>(globalFoodRef, userFoodRef)
+            .addOnSuccessListener { results ->
+                val allFoodList = results.flatMap { it.documents.mapNotNull { doc -> doc.id } }
+                _foodList.value = allFoodList.distinct()
             }
             .addOnFailureListener { exception ->
-                Log.e("Firestore", "Firestore data error", exception)
+                Log.e("Firestore", "Error getting food list", exception)
             }
     }
 
     fun fetchMealDetails(mealId: String) {
-        db.collection("food")
-            .document(mealId)
-            .get()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val globalMealRef = db.collection("food").document(mealId)
+        val userMealRef = db.collection("users").document(userId).collection("food").document(mealId)
+
+        globalMealRef.get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val calories = document.getDouble("calories") ?: 0.0
-                    val fat = document.getDouble("fat") ?: 0.0
-                    val proteins = document.getDouble("proteins") ?: 0.0
-                    val carbs = document.getDouble("carbs") ?: 0.0
-
-                    _mealData.value = MealData(calories, proteins, carbs, fat)
+                    updateMealData(document)
+                } else {
+                    userMealRef.get()
+                        .addOnSuccessListener { userDocument ->
+                            if (userDocument.exists()) {
+                                updateMealData(userDocument)
+                            } else {
+                                Log.e("Firestore", "Meal not found in global or user collection")
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("Firestore", "Error fetching user meal details", exception)
+                        }
                 }
             }
             .addOnFailureListener { exception ->
-                Log.e("Firestore", "Firestore food data error", exception)
+                Log.e("Firestore", "Error fetching global meal details", exception)
             }
     }
 
-    private fun fetchEatenData() {
-        val userId = auth.currentUser?.uid ?: return
-        val userRef = db.collection("users").document(userId)
-        userRef.get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    _caloriesEaten.doubleValue = document.getDouble("caloriesEaten") ?: 0.0
-                    _proteinsEaten.doubleValue = document.getDouble("proteinsEaten") ?: 0.0
-                    _carbsEaten.doubleValue = document.getDouble("carbsEaten") ?: 0.0
-                    _fatEaten.doubleValue = document.getDouble("fatEaten") ?: 0.0
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Firestore", "Firestore data Error", exception)
-            }
+    private fun updateMealData(document: DocumentSnapshot) {
+        val calories = document.getDouble("calories") ?: 0.0
+        val fat = document.getDouble("fat") ?: 0.0
+        val proteins = document.getDouble("proteins") ?: 0.0
+        val carbs = document.getDouble("carbs") ?: 0.0
+
+        _mealData.value = MealData("", calories, proteins, carbs, fat)
+        _mealName.value = document.id
     }
+
 
     fun addMealToFirestore(
         adjustedCalories: Double,
