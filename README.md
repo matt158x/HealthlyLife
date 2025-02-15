@@ -23,4 +23,7 @@ Technologies:
 <img src="https://github.com/user-attachments/assets/de0d7749-b28a-40c7-8fa7-af0d414781ee" width="300" height="600">
 <img src="https://github.com/user-attachments/assets/81964145-1acb-48d2-ba85-adde668b1730" width="300" height="600">
 <img src="https://github.com/user-attachments/assets/5dabaab5-0ecb-4976-91c0-6c28baf202b9" width="300" height="600">
+<img src="https://github.com/user-attachments/assets/a2fee512-998f-4a07-8e67-64c36ab0a39b" width="300" height="600">
+<img src="https://github.com/user-attachments/assets/4fa39ad6-eae1-4521-8736-1b352b6dc7b5" width="300" height="600">
+
 
