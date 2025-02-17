@@ -6,7 +6,6 @@ sealed class AuthState {
     data object FormNotCompleted : AuthState()
     data object Loading : AuthState()
 
-    // Błędy
     data class Error(val message: String) : AuthState()
     data class PasswordMismatch(val message: String) : AuthState()
     data class UserExists(val message: String) : AuthState()

@@ -23,7 +23,6 @@ class RegisterScreenViewModel(
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Po udanej rejestracji sprawdź status użytkownika
                     sharedViewModel.checkAuthStatus()
                 } else {
                     val errorMessage = when (task.exception) {

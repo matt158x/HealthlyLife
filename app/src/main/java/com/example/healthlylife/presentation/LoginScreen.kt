@@ -151,13 +151,12 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            // Zmieniamy `authState.value` na `authState` bezpośrednio
             CustomButton(
                 text = "LOG IN",
                 onClick = {
                     loginViewModel.login(email, password)
                 },
-                enabled = authState != AuthState.Loading, // Teraz bezpośrednio sprawdzamy `authState`
+                enabled = authState != AuthState.Loading,
                 textColor = Color.Black
             )
 

@@ -20,7 +20,7 @@ class LoginScreenViewModel(
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Po udanym logowaniu sprawdź status użytkownika
+
                     sharedViewModel.checkAuthStatus()
                 } else {
                     val errorMessage = when (task.exception) {

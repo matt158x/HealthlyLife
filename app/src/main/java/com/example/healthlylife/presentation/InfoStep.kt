@@ -216,7 +216,8 @@ fun InfoStep(
 
             CustomButton(
                 onClick = {
-                    if (selectedHeight == 0 || selectedCurrentWeight == 0 || selectedTargetWeight == 0) {
+                    if (selectedHeight == 0 || selectedCurrentWeight == 0 ||
+                        (goal != "Maintain Weight" && selectedTargetWeight == 0)) {
                         Toast.makeText(context, "Enter your data", Toast.LENGTH_SHORT).show()
                     } else {
                         if (goal == "Gain Weight" && selectedTargetWeight <= selectedCurrentWeight) {
@@ -229,10 +230,11 @@ fun InfoStep(
                             } else {
                                 viewModel.updateSelectedTargetWeight(selectedTargetWeight)
                             }
+
+
                             viewModel.updateSelectedCurrentWeight(selectedCurrentWeight)
                             viewModel.updateSelectedHeight(selectedHeight)
                             viewModel.calculateAll()
-
                             onNext()
                         }
                     }

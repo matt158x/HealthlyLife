@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MealsAddViewModel @Inject constructor(
     private val db: FirebaseFirestore,
-    private val auth: FirebaseAuth // Pobieranie aktualnie zalogowanego użytkownika
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
     var mealName by mutableStateOf("")
@@ -38,7 +38,7 @@ class MealsAddViewModel @Inject constructor(
         )
 
         db.collection("users").document(userId).collection("food")
-            .document(mealName) // Ustawiamy ID dokumentu na nazwę posiłku!
+            .document(mealName)
             .set(meal)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { e -> onError(e.message ?: "Unknown error") }

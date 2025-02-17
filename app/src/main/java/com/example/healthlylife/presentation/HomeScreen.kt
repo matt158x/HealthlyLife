@@ -47,6 +47,7 @@ fun HomeScreen(
     val fatEatenFormatted = String.format("%.1f", fatEaten)
 
 
+
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
                 painter = painterResource(id = R.drawable.home_background),
@@ -170,7 +171,7 @@ fun HomeScreen(
 
             CustomButtonHome(
                 modifier = Modifier,
-                text = "Show Recipes",
+                text = "Show Training plans",
                 onClick = { navController.navigate("calories") },
                 image = painterResource(id = R.drawable.calories),
 
