@@ -19,6 +19,7 @@ import com.example.healthlylife.presentation.MealsAddScreen
 import com.example.healthlylife.presentation.MealsScreen
 import com.example.healthlylife.presentation.MultiStepUserForm
 import com.example.healthlylife.presentation.ProfileScreen
+import com.example.healthlylife.presentation.RecipeDetailScreen
 import com.example.healthlylife.presentation.RecipesScreen
 import com.example.healthlylife.presentation.RegisterScreen
 import com.example.healthlylife.presentation.StartScreen
@@ -58,6 +59,13 @@ fun AppNavigation(sharedViewModel: SharedViewModel = viewModel()) {
         }
         composable("recipes") {
             RecipesScreen(navController)
+        }
+        composable("recipes_detail/{imageId}") {
+                backStackEntry ->
+            val imageId = backStackEntry.arguments?.getString("imageId")?.toIntOrNull()
+            if (imageId != null) {
+                RecipeDetailScreen(navController, imageId)
+            }
         }
         composable("meals") {
             MealsScreen(navController)

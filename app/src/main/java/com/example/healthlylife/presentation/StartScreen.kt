@@ -38,6 +38,9 @@ val submarinerFontFamily = FontFamily(
 val damionFontFamily = FontFamily(
     Font(R.font.damion,weight = FontWeight.Normal)
 )
+val alkatrFontFamily = FontFamily(
+    Font(R.font.alkatr,weight = FontWeight.Normal)
+)
 
 
 @Composable

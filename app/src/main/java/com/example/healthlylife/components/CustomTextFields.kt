@@ -1,5 +1,6 @@
 package com.example.healthlylife.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,10 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.healthlylife.presentation.alkatrFontFamily
 
 @Composable
 fun CustomTextField(
@@ -66,6 +72,36 @@ fun MacroInputField(label: String, value: String, onValueChange: (String) -> Uni
             modifier = Modifier.fillMaxWidth()
                 .padding(top = 20.dp),
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+        )
+    }
+}
+
+@Composable
+fun MacroNutrientItem(
+    label: String,
+    value: String,
+    fontSize: TextUnit = 14.sp,
+    fontFamily: FontFamily = alkatrFontFamily,
+    modifier: Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(0.dp)
+    ) {
+        Text(
+            text = label,
+            modifier = modifier,
+            fontSize = fontSize,
+            color = Color.White,
+            fontFamily = fontFamily
+
+        )
+
+        Text(
+            text = value,
+            fontSize = fontSize,
+            color = Color.White,
+            fontFamily = fontFamily
         )
     }
 }

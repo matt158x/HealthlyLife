@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.components.CustomButtonHome
+import com.example.healthlylife.components.MacroNutrientItem
 import com.example.healthlylife.viewmodel.HomeScreenViewModel
 
 @SuppressLint("DefaultLocale")
@@ -140,13 +141,12 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     .padding(horizontal = 20.dp)
-                    .background(Color(0xFF292929), shape = RoundedCornerShape(12.dp))
-                    .padding(horizontal = 10.dp),
+                    .background(Color(0xFF292929), shape = RoundedCornerShape(12.dp)),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                MacroNutrientItem(label = "Proteins", value = proteinsEatenFormatted)
-                MacroNutrientItem(label = "Carbs", value = carbsEatenFormatted)
-                MacroNutrientItem(label = "Fat", value = fatEatenFormatted)
+                MacroNutrientItem(label = "Proteins", value = proteinsEatenFormatted, modifier = Modifier.padding(top = 5.dp))
+                MacroNutrientItem(label = "Carbs", value = carbsEatenFormatted, modifier = Modifier.padding(top = 5.dp))
+                MacroNutrientItem(label = "Fat", value = fatEatenFormatted, modifier = Modifier.padding(top = 5.dp))
             }
 
             Spacer(Modifier.height(60.dp))
@@ -181,21 +181,3 @@ fun HomeScreen(
 }
 }
 
-@Composable
-fun MacroNutrientItem(label: String, value: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = label,
-            fontSize = 14.sp,
-            color = Color.White
-        )
-
-        Text(
-            text = value,
-            fontSize = 18.sp,
-            color = Color.White
-        )
-    }
-}

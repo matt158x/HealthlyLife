@@ -26,10 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
 import com.example.healthlylife.R
 
 
@@ -112,24 +112,24 @@ fun RecipesScreen(navController: NavController) {
 }
 
 @Composable
-fun RecipeImageList(navController: NavController, images: List<Any>) {
+fun RecipeImageList(navController: NavController, images: List<Int>) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        items(images) { imageUrl ->
+        items(images) { imageId ->
             Box(
                 modifier = Modifier
                     .width(150.dp)
                     .height(200.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .clickable {
-
-                        navController.navigate("recipeDetailScreen/$imageUrl")
+                        // Przechodzimy do ekranu szczegółowego
+                        navController.navigate("recipes_detail/$imageId")
                     }
             ) {
                 Image(
-                    painter = rememberImagePainter(imageUrl),
+                    painter = painterResource(id = imageId),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop

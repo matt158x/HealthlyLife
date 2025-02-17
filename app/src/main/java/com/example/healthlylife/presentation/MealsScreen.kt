@@ -44,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.components.CustomAddButton
 import com.example.healthlylife.components.CustomButton
+import com.example.healthlylife.components.MacroNutrientItem
 import com.example.healthlylife.viewmodel.MealsScreenViewModel
 import java.util.Locale
 
@@ -200,13 +201,13 @@ fun MealsScreen(
                     .fillMaxWidth()
                     .height(60.dp)
                     .background(Color(0xFF292929), shape = RoundedCornerShape(12.dp))
-                    .padding(horizontal = 10.dp, vertical = 5.dp),
+                    .padding(horizontal = 20.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                MacroNutrientItem(label = "Calories", value = String.format(Locale.US, "%.1f", adjustedCalories))
-                MacroNutrientItem(label = "Proteins", value = String.format(Locale.US, "%.1f", adjustedProteins))
-                MacroNutrientItem(label = "Carbs", value = String.format(Locale.US, "%.1f", adjustedCarbs))
-                MacroNutrientItem(label = "Fat", value = String.format(Locale.US, "%.1f", adjustedFat))
+                MacroNutrientItem(label = "Calories", value = String.format(Locale.US, "%.1f", adjustedCalories), modifier = Modifier.padding(top = 5.dp))
+                MacroNutrientItem(label = "Proteins", value = String.format(Locale.US, "%.1f", adjustedProteins), modifier = Modifier.padding(top = 5.dp))
+                MacroNutrientItem(label = "Carbs", value = String.format(Locale.US, "%.1f", adjustedCarbs), modifier = Modifier.padding(top = 5.dp))
+                MacroNutrientItem(label = "Fat", value = String.format(Locale.US, "%.1f", adjustedFat), modifier = Modifier.padding(top = 5.dp))
             }
 
             Spacer(Modifier.height(30.dp))
