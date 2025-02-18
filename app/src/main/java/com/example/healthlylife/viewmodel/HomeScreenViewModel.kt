@@ -3,6 +3,7 @@ package com.example.healthlylife.viewmodel
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,6 +28,9 @@ class HomeScreenViewModel @Inject constructor(
     private val _fatEaten = mutableDoubleStateOf(0.0)
     val fatEaten: State<Double> = _fatEaten
 
+    private val _bmr = mutableIntStateOf(0)  // Dodana wartość BMR
+    val bmr: State<Int> = _bmr
+
     init {
         fetchEatenData()
     }
@@ -41,6 +45,7 @@ class HomeScreenViewModel @Inject constructor(
                     _proteinsEaten.doubleValue = document.getDouble("proteinsEaten") ?: 0.0
                     _carbsEaten.doubleValue = document.getDouble("carbsEaten") ?: 0.0
                     _fatEaten.doubleValue = document.getDouble("fatEaten") ?: 0.0
+                    _bmr.intValue = document.getLong("bmr")?.toInt() ?: 0
                 }
             }
             .addOnFailureListener { exception ->

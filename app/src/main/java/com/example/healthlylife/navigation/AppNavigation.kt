@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,6 +24,7 @@ import com.example.healthlylife.presentation.RecipeDetailScreen
 import com.example.healthlylife.presentation.RecipesScreen
 import com.example.healthlylife.presentation.RegisterScreen
 import com.example.healthlylife.presentation.StartScreen
+import com.example.healthlylife.viewmodel.RecipeDetailScreenViewModel
 import com.example.healthlylife.viewmodel.SharedViewModel
 
 @Composable
@@ -46,7 +48,7 @@ fun AppNavigation(sharedViewModel: SharedViewModel = viewModel()) {
             RegisterScreen(navController, sharedViewModel)
         }
         composable("profile") {
-            ProfileScreen(navController, sharedViewModel)
+            ProfileScreen(navController)
         }
         composable("form") {
             MultiStepUserForm(navController)
@@ -63,8 +65,9 @@ fun AppNavigation(sharedViewModel: SharedViewModel = viewModel()) {
         composable("recipes_detail/{imageId}") {
                 backStackEntry ->
             val imageId = backStackEntry.arguments?.getString("imageId")?.toIntOrNull()
+            val viewModel: RecipeDetailScreenViewModel = hiltViewModel()
             if (imageId != null) {
-                RecipeDetailScreen(navController, imageId)
+                RecipeDetailScreen(navController,viewModel ,imageId)
             }
         }
         composable("meals") {

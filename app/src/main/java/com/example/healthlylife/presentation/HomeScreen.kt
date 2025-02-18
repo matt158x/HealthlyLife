@@ -1,6 +1,7 @@
 package com.example.healthlylife.presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,7 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -42,12 +47,19 @@ fun HomeScreen(
     val proteinsEaten = viewModel.proteinsEaten.value
     val carbsEaten = viewModel.carbsEaten.value
     val fatEaten = viewModel.fatEaten.value
+    val bmr = viewModel.bmr.value
+
+    val remainingCalories = maxOf(bmr - caloriesEaten.toInt(),0)
 
     val proteinsEatenFormatted = String.format("%.1f", proteinsEaten)
     val carbsEatenFormatted = String.format("%.1f", carbsEaten)
     val fatEatenFormatted = String.format("%.1f", fatEaten)
 
-
+    val progress = if (bmr > 0) {
+        1 - (remainingCalories.toFloat() / bmr.toFloat())
+    } else {
+        0f
+    }
 
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
@@ -56,8 +68,6 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-
-        Spacer(modifier = Modifier.height(60.dp))
 
         IconButton(
             onClick = { navController.navigate("profile") },
@@ -72,69 +82,99 @@ fun HomeScreen(
             )
         }
 
-        Column(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Spacer(modifier = Modifier.height(50.dp))
-
-            Image(
-                painter = painterResource(R.drawable.logo),
-                contentDescription = "logo",
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(top = 80.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "0",
-                    fontSize = 28.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(start = 35.dp)
-                )
-                Text(
-                    text = caloriesEaten.toInt().toString(),
-                    fontSize = 28.sp,
-                    color = Color.White,
-                )
-                Text(
-                    text = "0",
-                    fontSize = 28.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(end = 25.dp)
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Eaten",
-                    fontSize = 18.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(start = 40.dp)
-                )
-                Text(
-                    text = "Goal",
-                    fontSize = 22.sp,
-                    color = Color.White,
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-                Text(
-                    text = "Burned",
-                    fontSize = 18.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(end = 30.dp)
-                )
-            }
+                Spacer(modifier = Modifier.height(40.dp))
 
-            Spacer(Modifier.height(85.dp))
+                Image(
+                    painter = painterResource(R.drawable.logo),
+                    contentDescription = "logo",
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy((-10).dp)) {
+                        Text(
+                            text = caloriesEaten.toInt().toString(),
+                            fontSize = 22.sp,
+                            color = Color.White,
+                            fontFamily = alkatrFontFamily
+                        )
+                        Text(
+                            text = "EATEN",
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            fontFamily = alkatrFontFamily
+                        )
+                    }
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.size(150.dp)
+                        ) {
+                            CircularProgressIndicator(
+                                progress = progress,
+                                modifier = Modifier.fillMaxSize(),
+                                color = Color.Green,
+                                strokeWidth = 20f
+                            )
+
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy((-10).dp)) {
+                                Text(
+                                    text = remainingCalories.toString(),
+                                    fontSize = 32.sp,
+                                    color = Color.White,
+                                    fontFamily = alkatrFontFamily
+                                )
+
+                                Text(
+                                    text = "KCAL LEFT",
+                                    fontSize = 12.sp,
+                                    color = Color.White,
+                                    fontFamily = alkatrFontFamily
+                                )
+                            }
+
+                        }
+
+                    }
+
+                    Column(horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy((-10).dp)) {
+                        Text(
+                            text = "0",
+                            fontSize = 22.sp,
+                            color = Color.White,
+                            fontFamily = alkatrFontFamily
+                        )
+                        Text(
+                            text = "BURNED",
+                            fontSize = 12.sp,
+                            color = Color.White,
+                            fontFamily = alkatrFontFamily,
+                        )
+                    }
+                }
+
+
+
+
+            Spacer(Modifier.height(55.dp))
 
             Row(
                 modifier = Modifier
@@ -180,4 +220,36 @@ fun HomeScreen(
         }
 }
 }
+
+
+@Composable
+fun CircularProgressIndicator(
+    progress: Float, // Procent postępu (0.0 do 1.0)
+    modifier: Modifier = Modifier,
+    color: Color = Color.Green, // Kolor wypełnienia
+    strokeWidth: Float = 20f // Grubość linii
+) {
+    Canvas(modifier = modifier) {
+        // Rysowanie tła okręgu
+        drawArc(
+            color = Color.LightGray,
+            startAngle = -90f, // Zaczynamy od góry (12:00)
+            sweepAngle = 360f, // Pełny okrąg
+            useCenter = false,
+            style = Stroke(strokeWidth, cap = StrokeCap.Round),
+            size = Size(size.width, size.height)
+        )
+
+        // Rysowanie wypełnienia zgodnie z postępem
+        drawArc(
+            color = color,
+            startAngle = -90f,
+            sweepAngle = 360f * progress, // Wypełnienie zgodnie z postępem
+            useCenter = false,
+            style = Stroke(strokeWidth, cap = StrokeCap.Round),
+            size = Size(size.width, size.height)
+        )
+    }
+}
+
 

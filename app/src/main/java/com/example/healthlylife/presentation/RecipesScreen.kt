@@ -124,7 +124,6 @@ fun RecipeImageList(navController: NavController, images: List<Int>) {
                     .height(200.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .clickable {
-                        // Przechodzimy do ekranu szczegółowego
                         navController.navigate("recipes_detail/$imageId")
                     }
             ) {

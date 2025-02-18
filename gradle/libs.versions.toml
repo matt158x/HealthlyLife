@@ -1,6 +1,7 @@
 [versions]
 agp = "8.7.3"
 coilCompose = "2.4.0"
+constraintlayoutCompose = "1.1.0"
 datastorePreferences = "1.1.2"
 hiltNavigationCompose = "1.2.0"
 kmpDateTimePicker = "1.0.2"
@@ -25,6 +26,7 @@ datastoreCoreAndroid = "1.1.2"
 
 
 [libraries]
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
