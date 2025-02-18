@@ -28,7 +28,7 @@ class HomeScreenViewModel @Inject constructor(
     private val _fatEaten = mutableDoubleStateOf(0.0)
     val fatEaten: State<Double> = _fatEaten
 
-    private val _bmr = mutableIntStateOf(0)  // Dodana wartość BMR
+    private val _bmr = mutableIntStateOf(0)
     val bmr: State<Int> = _bmr
 
     init {

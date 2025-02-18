@@ -39,20 +39,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.R
+import com.example.healthlylife.auth.AuthState
 import com.example.healthlylife.components.CustomButton
 import com.example.healthlylife.components.CustomTextField
-import com.example.healthlylife.auth.AuthState
 import com.example.healthlylife.viewmodel.RegisterScreenViewModel
 import com.example.healthlylife.viewmodel.SharedViewModel
 
 @Composable
 fun RegisterScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel = viewModel(),
-    registerViewModel: RegisterScreenViewModel = viewModel { RegisterScreenViewModel(sharedViewModel) }
+    sharedViewModel: SharedViewModel = hiltViewModel(),
+    registerViewModel: RegisterScreenViewModel = hiltViewModel()
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -174,7 +174,7 @@ fun RegisterScreen(
                     CustomButton(
                         text = "REGISTER",
                         onClick = {
-                                registerViewModel.signup(email, password, confirmPassword)
+                                registerViewModel.signup(email, password, confirmPassword, sharedViewModel)
                         },
                         enabled = authState != AuthState.Loading,
                         textColor = Color.Black

@@ -25,7 +25,10 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun MultiStepUserForm(navController: NavController, viewModel: MultiStepUserFormViewModel = hiltViewModel()) {
+fun MultiStepUserForm(
+    navController: NavController,
+    viewModel: MultiStepUserFormViewModel = hiltViewModel()
+) {
     var currentStep by remember { mutableIntStateOf(1) }
     val userId = FirebaseAuth.getInstance().currentUser?.uid
 

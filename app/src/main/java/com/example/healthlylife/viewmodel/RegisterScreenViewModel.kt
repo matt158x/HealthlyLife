@@ -4,13 +4,16 @@ import androidx.lifecycle.ViewModel
 import com.example.healthlylife.auth.AuthState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegisterScreenViewModel(
-    private val sharedViewModel: SharedViewModel
+@HiltViewModel
+class RegisterScreenViewModel @Inject constructor(
+    private val auth: FirebaseAuth
 ) : ViewModel() {
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun signup(email: String, password: String, confirmPassword: String) {
+
+    fun signup(email: String, password: String, confirmPassword: String, sharedViewModel: SharedViewModel) {
         if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             sharedViewModel.updateAuthState(AuthState.Error("All fields are required"))
             return

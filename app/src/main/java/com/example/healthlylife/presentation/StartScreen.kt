@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.auth.AuthState
@@ -46,7 +47,8 @@ val alkatrFontFamily = FontFamily(
 @Composable
 fun StartScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel) {
+    sharedViewModel: SharedViewModel = hiltViewModel()
+) {
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(

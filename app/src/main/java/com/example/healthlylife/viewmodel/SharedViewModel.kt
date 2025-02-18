@@ -6,10 +6,15 @@ import androidx.lifecycle.ViewModel
 import com.example.healthlylife.auth.AuthState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class SharedViewModel : ViewModel() {
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+@HiltViewModel
+class SharedViewModel @Inject constructor(
+    private val auth: FirebaseAuth
+) : ViewModel() {
+
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 

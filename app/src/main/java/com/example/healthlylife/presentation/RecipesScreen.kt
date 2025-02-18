@@ -34,7 +34,8 @@ import com.example.healthlylife.R
 
 
 @Composable
-fun RecipesScreen(navController: NavController) {
+fun RecipesScreen(
+    navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()

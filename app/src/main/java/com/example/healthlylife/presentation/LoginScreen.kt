@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.healthlylife.R
 import com.example.healthlylife.auth.AuthState
@@ -51,8 +51,8 @@ import com.example.healthlylife.viewmodel.SharedViewModel
 @Composable
 fun LoginScreen(
     navController: NavController,
-    sharedViewModel: SharedViewModel = viewModel(),
-    loginViewModel: LoginScreenViewModel = viewModel { LoginScreenViewModel(sharedViewModel) }
+    sharedViewModel: SharedViewModel = hiltViewModel(),
+    loginViewModel: LoginScreenViewModel = hiltViewModel()
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -154,7 +154,7 @@ fun LoginScreen(
             CustomButton(
                 text = "LOG IN",
                 onClick = {
-                    loginViewModel.login(email, password)
+                    loginViewModel.login(email, password, sharedViewModel)
                 },
                 enabled = authState != AuthState.Loading,
                 textColor = Color.Black

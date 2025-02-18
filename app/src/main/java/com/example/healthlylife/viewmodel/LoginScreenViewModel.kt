@@ -5,13 +5,16 @@ import com.example.healthlylife.auth.AuthState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginScreenViewModel(
-    private val sharedViewModel: SharedViewModel
+@HiltViewModel
+class LoginScreenViewModel @Inject constructor(
+    private val auth: FirebaseAuth
 ) : ViewModel() {
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun login(email: String, password: String) {
+
+    fun login(email: String, password: String, sharedViewModel: SharedViewModel) {
         if (email.isEmpty() || password.isEmpty()) {
             sharedViewModel.updateAuthState(AuthState.Error("Email or password can't be empty"))
             return
