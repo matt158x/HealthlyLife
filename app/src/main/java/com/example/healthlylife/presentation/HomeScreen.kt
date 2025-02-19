@@ -48,6 +48,7 @@ fun HomeScreen(
     val carbsEaten = viewModel.carbsEaten.value
     val fatEaten = viewModel.fatEaten.value
     val bmr = viewModel.bmr.value
+    val caloriesBurned = viewModel.caloriesBurned.value
 
     val remainingCalories = maxOf(bmr - caloriesEaten.toInt(),0)
 
@@ -157,7 +158,7 @@ fun HomeScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy((-10).dp)) {
                         Text(
-                            text = "0",
+                            text = caloriesBurned.toInt().toString(),
                             fontSize = 22.sp,
                             color = Color.White,
                             fontFamily = alkatrFontFamily
@@ -224,27 +225,24 @@ fun HomeScreen(
 
 @Composable
 fun CircularProgressIndicator(
-    progress: Float, // Procent postępu (0.0 do 1.0)
+    progress: Float,
     modifier: Modifier = Modifier,
-    color: Color = Color.Green, // Kolor wypełnienia
-    strokeWidth: Float = 20f // Grubość linii
+    color: Color = Color.Green,
+    strokeWidth: Float = 20f
 ) {
     Canvas(modifier = modifier) {
-        // Rysowanie tła okręgu
         drawArc(
             color = Color.LightGray,
-            startAngle = -90f, // Zaczynamy od góry (12:00)
-            sweepAngle = 360f, // Pełny okrąg
+            startAngle = -90f,
+            sweepAngle = 360f,
             useCenter = false,
             style = Stroke(strokeWidth, cap = StrokeCap.Round),
             size = Size(size.width, size.height)
         )
-
-        // Rysowanie wypełnienia zgodnie z postępem
         drawArc(
             color = color,
             startAngle = -90f,
-            sweepAngle = 360f * progress, // Wypełnienie zgodnie z postępem
+            sweepAngle = 360f * progress,
             useCenter = false,
             style = Stroke(strokeWidth, cap = StrokeCap.Round),
             size = Size(size.width, size.height)

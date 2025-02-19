@@ -132,7 +132,7 @@ fun MealsScreen(
                 shape = RoundedCornerShape(16.dp)
             )
 
-                Spacer(modifier = Modifier.width(8.dp)) // Dodaje odstęp między TextField a przyciskiem
+                Spacer(modifier = Modifier.width(8.dp))
 
                 CustomAddButton(
                     modifier = Modifier

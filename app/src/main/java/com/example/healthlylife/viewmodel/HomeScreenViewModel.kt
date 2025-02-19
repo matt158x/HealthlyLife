@@ -31,6 +31,9 @@ class HomeScreenViewModel @Inject constructor(
     private val _bmr = mutableIntStateOf(0)
     val bmr: State<Int> = _bmr
 
+    private val _caloriesBurned = mutableDoubleStateOf(0.0)
+    val caloriesBurned: State<Double> = _caloriesBurned
+
     init {
         fetchEatenData()
     }
@@ -46,6 +49,7 @@ class HomeScreenViewModel @Inject constructor(
                     _carbsEaten.doubleValue = document.getDouble("carbsEaten") ?: 0.0
                     _fatEaten.doubleValue = document.getDouble("fatEaten") ?: 0.0
                     _bmr.intValue = document.getLong("bmr")?.toInt() ?: 0
+                    _caloriesBurned.doubleValue = document.getDouble("caloriesBurned") ?: 0.0
                 }
             }
             .addOnFailureListener { exception ->

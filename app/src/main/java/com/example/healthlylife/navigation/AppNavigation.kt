@@ -13,7 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.healthlylife.auth.AuthState
-import com.example.healthlylife.presentation.CaloriesScreen
+import com.example.healthlylife.presentation.BurnCaloriesScreen
+import com.example.healthlylife.presentation.BurnDetailsScreen
 import com.example.healthlylife.presentation.HomeScreen
 import com.example.healthlylife.presentation.LoginScreen
 import com.example.healthlylife.presentation.MealsAddScreen
@@ -57,7 +58,7 @@ fun AppNavigation(sharedViewModel: SharedViewModel = viewModel()) {
             HomeScreen(navController)
         }
         composable("calories"){
-            CaloriesScreen(navController)
+            BurnCaloriesScreen(navController)
         }
         composable("recipes") {
             RecipesScreen(navController)
@@ -76,6 +77,12 @@ fun AppNavigation(sharedViewModel: SharedViewModel = viewModel()) {
         composable("meals_add") {
             MealsAddScreen(navController)
         }
+        composable("burn_details_screen/{activityType}") {
+                backStackEntry ->
+            val activityType = backStackEntry.arguments?.getString("activityType") ?: ""
+            BurnDetailsScreen(navController, activityType)
+        }
+
 
     }
 
