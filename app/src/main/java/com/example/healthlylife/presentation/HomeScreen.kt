@@ -212,7 +212,7 @@ fun HomeScreen(
 
             CustomButtonHome(
                 modifier = Modifier,
-                text = "Show Training plans",
+                text = "Burn Calories",
                 onClick = { navController.navigate("calories") },
                 image = painterResource(id = R.drawable.calories),
 
