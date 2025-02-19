@@ -32,6 +32,8 @@ Technologies:
 <img src="https://github.com/user-attachments/assets/c874ee77-b81c-41dd-948b-bf7b6e442f88" width="300" height="600">
 <img src="https://github.com/user-attachments/assets/df1ba491-a4b1-4293-adae-b0fdd74973a1" width="300" height="600">
 
+
+
 "Add meal" is used to add meals. The database contains basic foods and ingredients with their nutritional values. The user can add his own and they are visible only to him. 
 "Show Recipes" is used to browse cooking recipes. The entire recipe with nutritional values ​​is available there. The user can add a recipe to his database by clicking the "Add to favorites" button in order to "eat" it later. 
 "Burn Calories" is used to calculate the calories burned. The activities I have added include cycling, roller skating, swimming, running and strength training. Each activity has its own intensity that the user can choose. Calories burned are calculated according to the "met" value corresponding to the training intensity and the user's weight.
